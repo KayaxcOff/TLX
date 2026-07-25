@@ -1,5 +1,6 @@
 add_library(TLX STATIC
         source/exception.cpp
+        ../source/memory.cpp
 )
 
 target_include_directories(TLX PUBLIC

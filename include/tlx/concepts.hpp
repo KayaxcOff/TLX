@@ -5,6 +5,8 @@
 #ifndef TLX_CONCEPTS_HPP
 #define TLX_CONCEPTS_HPP
 
+#include <type_traits>
+
 namespace tlx {
     /**
      * @brief Specifies that a type is both nothrow move-constructible and nothrow move-assignable.
@@ -58,6 +60,17 @@ namespace tlx {
      */
     template<typename T>
     concept arithmetic_like = integral_t<T> || float_t<T>;
+
+    /**
+     * @brief Concept that checks if a type is nothrow destructible and constructible from given arguments.
+     *
+     * Combines nothrow destructibility with constructibility from the provided argument types.
+     *
+     * @tparam Ty   The type to be constructed.
+     * @tparam Args The argument types used for construction.
+     */
+    template<class Ty, class... Args>
+    concept constructible_from = __is_nothrow_destructible(Ty) && __is_constructible(Ty, Args...);
 } //namespace tlx
 
 #endif //TLX_CONCEPTS_HPP
