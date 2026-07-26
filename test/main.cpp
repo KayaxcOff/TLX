@@ -9,7 +9,14 @@ int main() {
     const tlx::bfloat16 x1 = 1.123f;
     const tlx::bfloat16 x2 = 2.210f;
 
-    std::cout << x1 + x2 << std::endl;
+    if (x1 > x2) {
+        std::cout << x1 << std::endl;
+    } else if (x1 == x2) {
+        std::cout << x1 << std::endl;
+        std::cout << x2 << std::endl;
+    } else {
+        std::cout << x2 << std::endl;
+    }
 
     return 0;
 }
