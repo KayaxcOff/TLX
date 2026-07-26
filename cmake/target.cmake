@@ -2,6 +2,7 @@ add_library(TLX STATIC
         source/exception.cpp
         source/memory.cpp
         source/status.cpp
+        ../source/types.cpp
 )
 
 target_include_directories(TLX PUBLIC

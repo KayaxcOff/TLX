@@ -24,3 +24,8 @@ target_compile_options(${PROJECT_NAME} PRIVATE
         -lineinfo
         >
 )
+
+target_compile_options(TLX
+        PUBLIC
+        $<$<CXX_COMPILER_ID:MSVC>:/Zc:preprocessor>
+)
