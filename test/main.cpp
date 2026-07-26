@@ -6,10 +6,10 @@
 #include <iostream>
 
 int main() {
-    const tlx::bfloat16 x1 = 2.0f;
+    const tlx::bfloat16 x1 = 1.123f;
+    const tlx::bfloat16 x2 = 2.210f;
 
-    std::cout << "value: " << x1 << std::endl;
-    std::cout << "size: " << sizeof(x1) << " bytes" << std::endl;
+    std::cout << x1 + x2 << std::endl;
 
     return 0;
 }

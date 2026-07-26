@@ -6,6 +6,7 @@
 #define TLX_TYPES_HPP
 
 #include <tlx/macros.hpp>
+#include <tlx/bit.hpp>
 #ifdef TLX_CUDA
     #include <cuda_bf16.h>
     #include <cuda/std/bit>
@@ -57,7 +58,7 @@ namespace tlx {
             #if defined(__CUDA_ARCH__)
                 __nv_bfloat16 a = static_cast<__nv_bfloat16>(*this);
                 __nv_bfloat16 b = static_cast<__nv_bfloat16>(other);
-                return bfloat16(__hadd(a, b));
+                return __hadd(a, b);
             #else //#if defined(__CUDA_ARCH__)
                 return static_cast<float>(*this) + static_cast<float>(other);
             #endif //#if defined(__CUDA_ARCH__) #else
@@ -66,7 +67,7 @@ namespace tlx {
                 #if defined(__CUDA_ARCH__)
                     __nv_bfloat16 a = static_cast<__nv_bfloat16>(*this);
                     __nv_bfloat16 b = static_cast<__nv_bfloat16>(other);
-                    return bfloat16(__hsub(a, b));
+                    return __hsub(a, b);
                 #else //#if defined(__CUDA_ARCH__)
                     return static_cast<float>(*this) - static_cast<float>(other);
                 #endif //#if defined(__CUDA_ARCH__) #else
@@ -75,7 +76,7 @@ namespace tlx {
                 #if defined(__CUDA_ARCH__)
                     __nv_bfloat16 a = static_cast<__nv_bfloat16>(*this);
                     __nv_bfloat16 b = static_cast<__nv_bfloat16>(other);
-                    return bfloat16(__hmul(a, b));
+                    return __hmul(a, b);
                 #else //#if defined(__CUDA_ARCH__)
                     return static_cast<float>(*this) * static_cast<float>(other);
                 #endif //#if defined(__CUDA_ARCH__) #else
@@ -84,7 +85,7 @@ namespace tlx {
                 #if defined(__CUDA_ARCH__)
                     __nv_bfloat16 a = static_cast<__nv_bfloat16>(*this);
                     __nv_bfloat16 b = static_cast<__nv_bfloat16>(other);
-                return bfloat16(__hdiv(a, b));
+                    return __hdiv(a, b);
                 #else //#if defined(__CUDA_ARCH__)
                     return static_cast<float>(*this) / static_cast<float>(other);
                 #endif //#if defined(__CUDA_ARCH__) #else
@@ -133,6 +134,120 @@ namespace tlx {
     };
 
     std::ostream& operator<<(std::ostream& os, const bfloat16& value);
+
+    /**
+     * @brief 16-bit IEEE 754 half-precision floating-point type (binary16).
+     *
+     * This type stores a 16-bit floating-point value in the IEEE 754 half-precision
+     * format (1 sign bit, 5 exponent bits, 10 mantissa bits). It provides seamless
+     * conversion to/from `float` and (when compiled with CUDA) `__half`.
+     * All arithmetic and comparison operators are supported.
+     *
+     * The type is aligned to 2 bytes and is usable in both host and device code
+     * (via the `TLX_HD` macro).
+     */
+    struct alignas(2) half {
+        TLX_HD half() = default;
+        TLX_HD half(const float value) {
+            this->m_value = bit::float_to_half_bits(value);
+        }
+        #ifdef TLX_CUDA
+            TLX_HD half(const __half value) {
+                this->m_value = __half_as_ushort(value);
+            }
+        #endif //#ifdef TLX_CUDA
+        TLX_HD half(const half&) = default;
+        TLX_HD half(half&&) noexcept = default;
+
+        TLX_HD operator float() const noexcept {
+            return bit::half_bits_to_float(this->m_value);
+        }
+        #ifdef TLX_CUDA
+            TLX_HD operator __half() const noexcept {
+                return __ushort_as_half(this->m_value);
+            }
+        #endif //#ifdef TLX_CUDA
+
+        TLX_HD half operator+(const half& other) const noexcept {
+            #if defined(__CUDA_ARCH__)
+                __nv_half a = static_cast<__nv_half>(other);
+                __nv_half b = static_cast<__nv_half>(*this);
+                return __hadd(a, b);
+            #else //#if defined(__CUDA_ARCH__)
+                return static_cast<float>(*this) + static_cast<float>(other);
+            #endif //#if defined(__CUDA_ARCH__) #else
+        }
+        TLX_HD half operator-(const half& other) const noexcept {
+            #if defined(__CUDA_ARCH__)
+                __nv_half a = static_cast<__nv_half>(other);
+                __nv_half b = static_cast<__nv_half>(*this);
+                return __hsub(a, b);
+            #else //#if defined(__CUDA_ARCH__)
+                return static_cast<float>(*this) - static_cast<float>(other);
+            #endif //#if defined(__CUDA_ARCH__) #else
+        }
+        TLX_HD half operator*(const half& other) const noexcept {
+            #if defined(__CUDA_ARCH__)
+                __nv_half a = static_cast<__nv_half>(other);
+                __nv_half b = static_cast<__nv_half>(*this);
+                return __hmul(a, b);
+            #else //#if defined(__CUDA_ARCH__)
+            return static_cast<float>(*this) * static_cast<float>(other);
+            #endif //#if defined(__CUDA_ARCH__) #else
+        }
+        TLX_HD half operator/(const half& other) const noexcept {
+            #if defined(__CUDA_ARCH__)
+                __nv_half a = static_cast<__nv_half>(other);
+                __nv_half b = static_cast<__nv_half>(*this);
+                return __hdiv(a, b);
+            #else //#if defined(__CUDA_ARCH__)
+                return static_cast<float>(*this) / static_cast<float>(other);
+            #endif //#if defined(__CUDA_ARCH__) #else
+        }
+
+        TLX_HD half& operator+=(const half& other) {
+            *this = *this + other;
+            return *this;
+        }
+        TLX_HD half& operator-=(const half& other) {
+            *this = *this - other;
+            return *this;
+        }
+        TLX_HD half& operator*=(const half& other) {
+            *this = *this * other;
+            return *this;
+        }
+        TLX_HD half& operator/=(const half& other) {
+            *this = *this / other;
+            return *this;
+        }
+
+        TLX_HD bool operator==(const half& other) const noexcept {
+            return static_cast<float>(*this) == static_cast<float>(other);
+        }
+        TLX_HD bool operator!=(const half& other) const noexcept {
+            return static_cast<float>(*this) != static_cast<float>(other);
+        }
+        TLX_HD bool operator<(const half& other) const noexcept {
+            return static_cast<float>(*this) < static_cast<float>(other);
+        }
+        TLX_HD bool operator<=(const half& other) const noexcept {
+            return static_cast<float>(*this) <= static_cast<float>(other);
+        }
+        TLX_HD bool operator>(const half& other) const noexcept {
+            return static_cast<float>(*this) > static_cast<float>(other);
+        }
+        TLX_HD bool operator>=(const half& other) const noexcept {
+            return static_cast<float>(*this) >= static_cast<float>(other);
+        }
+
+        TLX_HD half& operator=(const half&) = default;
+        TLX_HD half& operator=(half&&) noexcept = default;
+    private:
+        std::uint16_t m_value;
+    };
+
+    std::ostream& operator<<(std::ostream& os, const half& value);
 } //namespace tlx
 
 #endif //TLX_TYPES_HPP

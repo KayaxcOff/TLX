@@ -9,4 +9,9 @@ namespace tlx {
         os << std::fixed << static_cast<float>(value);
         return os;
     }
+
+    std::ostream& operator<<(std::ostream& os, const half& value) {
+        os << std::fixed << static_cast<float>(value);
+        return os;
+    }
 } //namespace tlx
