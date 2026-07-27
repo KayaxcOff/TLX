@@ -84,9 +84,7 @@ namespace tlx::bit {
         }
 
         return static_cast<std::uint16_t>(
-            sign |
-            (static_cast<std::uint32_t>(exp) << 10) |
-            (mantissa >> 13)
+            sign | (static_cast<std::uint32_t>(exp) << 10) | (mantissa >> 13)
         );
     }
 
@@ -120,10 +118,7 @@ namespace tlx::bit {
 
                 mantissa &= 0x3FFu;
 
-                result =
-                    sign |
-                    (exp << 23) |
-                    (mantissa << 13);
+                result = sign | (exp << 23) | (mantissa << 13);
             }
         } else if (exp == 31) {
             result =
@@ -133,13 +128,43 @@ namespace tlx::bit {
         } else {
             exp = exp + (127 - 15);
 
-            result =
-                sign |
-                (exp << 23) |
-                (mantissa << 13);
+            result = sign | (exp << 23) | (mantissa << 13);
         }
 
         return bit_cast<float>(result);
+    }
+
+    /**
+     * @brief Converts a single-precision float to a 16-bit bfloat16 bit pattern.
+     *
+     * Performs a fast conversion from IEEE 754 float32 to bfloat16 by
+     * rounding to nearest even and truncating the lower 16 bits of the
+     * mantissa. Special values (NaN, Infinity) are handled correctly
+     * by the rounding step.
+     *
+     * @param value Input single-precision floating-point value.
+     * @return std::uint16_t 16-bit representation of the bfloat16 value.
+     */
+    [[nodiscard]]
+    TLX_HD TLX_INLINE std::uint16_t float_to_bf16_bits(const float value) noexcept {
+        auto f_bits = bit_cast<std::uint32_t>(value);
+        f_bits += 0x7FFFu + ((f_bits >> 16) & 1u);
+        return static_cast<std::uint16_t>(f_bits >> 16);
+    }
+
+    /**
+     * @brief Converts a 16-bit bfloat16 bit pattern to a single-precision float.
+     *
+     * Reconstructs a float32 value by shifting the 16-bit bfloat16 pattern
+     * into the upper half of a 32-bit word (zero-extending the mantissa).
+     *
+     * @param value 16-bit bfloat16 bit pattern.
+     * @return float Equivalent single-precision floating-point value.
+     */
+    [[nodiscard]]
+    TLX_HD TLX_INLINE float bf16_to_float_bits(const std::uint16_t value) noexcept {
+        const std::uint32_t f_bits = static_cast<std::uint32_t>(value) << 16;
+        return bit_cast<float>(f_bits);
     }
 } //namespace tlx::bit
 

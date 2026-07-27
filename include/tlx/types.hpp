@@ -10,11 +10,6 @@
 #ifdef TLX_CUDA
     #include <cuda_bf16.h>
     #include <cuda_fp16.h>
-    #include <cuda/std/bit>
-    using cuda::std::bit_cast;
-#else //#ifdef TLX_CUDA
-    #include <bit>
-    using std::bit_cast;
 #endif //#ifdef TLX_CUDA #else
 #include <ostream>
 
@@ -31,23 +26,20 @@ namespace tlx {
      * (via the `TLX_HD` macro).
      */
     struct alignas(2) bfloat16 {
-        TLX_HD constexpr bfloat16() = default;
-        TLX_HD constexpr bfloat16(const float value) {
-            auto f_bits = bit_cast<std::uint32_t>(value);
-            f_bits += 0x7FFFu + ((f_bits >> 16) & 1u);
-            this->m_value = static_cast<std::uint16_t>(f_bits >> 16);
+        TLX_HD bfloat16() = default;
+        TLX_HD bfloat16(const float value) {
+            this->m_value = bit::float_to_bf16_bits(value);
         }
         #ifdef TLX_CUDA
             TLX_HD bfloat16(const __nv_bfloat16 value) {
                 this->m_value = __bfloat16_as_ushort(value);
             }
         #endif //#ifdef TLX_CUDA
-        TLX_HD constexpr bfloat16(const bfloat16&) = default;
-        TLX_HD constexpr bfloat16(bfloat16&&) noexcept = default;
+        TLX_HD bfloat16(const bfloat16&) = default;
+        TLX_HD bfloat16(bfloat16&&) noexcept = default;
 
-        TLX_HD constexpr operator float() const noexcept {
-            const std::uint32_t f_bits = static_cast<std::uint32_t>(this->m_value) << 16;
-            return bit_cast<float>(f_bits);
+        TLX_HD operator float() const noexcept {
+            return bit::bf16_to_float_bits(this->m_value);
         }
         #ifdef TLX_CUDA
             TLX_HD operator __nv_bfloat16() const {
