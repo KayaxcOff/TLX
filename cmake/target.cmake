@@ -14,5 +14,5 @@ if (TLX_CUDA)
         ${CUDA_LIBRARIES}
     )
 
-    target_compile_definitions(TLX PRIVATE TLX_CUDA)
+    target_compile_definitions(TLX PUBLIC TLX_CUDA)
 endif ()

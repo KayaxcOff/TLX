@@ -25,7 +25,8 @@ target_compile_options(${PROJECT_NAME} PRIVATE
         >
 )
 
-target_compile_options(TLX
-        PUBLIC
-        $<$<CXX_COMPILER_ID:MSVC>:/Zc:preprocessor>
+target_compile_options(TLX PUBLIC
+        $<$<COMPILE_LANGUAGE:CXX>:/Zc:preprocessor>
+        $<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=/Zc:preprocessor>
+        $<$<COMPILE_LANGUAGE:CUDA>:-diag-suppress=20012>
 )
