@@ -8,7 +8,6 @@
 #include <tlx/concepts.hpp>
 #include <tlx/utility.hpp>
 #include <cstddef>
-#include <cstdint>
 #include <cwchar>
 
 namespace tlx {
