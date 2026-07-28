@@ -4,6 +4,7 @@ add_library(TLX STATIC
         source/memory.cpp
         source/status.cpp
         source/types.cpp
+        ../source/string.cpp
 )
 
 target_include_directories(TLX PUBLIC

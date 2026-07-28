@@ -2,33 +2,13 @@
 // Created by muham on 26.07.2026.
 //
 
-#include <tlx/memory.hpp>
-#include <tlx/reference.hpp>
+#include <tlx/string.hpp>
 #include <iostream>
-#include <string>
-
-struct Printer {
-    Printer() {
-        this->message = "Hello World";
-    }
-
-    void print() const {
-        std::cout << this->message << std::endl;
-    }
-private:
-    std::string message;
-};
 
 int main() {
-    const Printer x1;
+    const tlx::vstring x1 = "Hello World!";
 
-    auto x2 = tlx::cref(x1);
-
-    if (tlx::isSameAddress(x1, x2())) {
-        std::cout << "They are the same" << std::endl;
-    } else {
-        std::cout << "They are not the same" << std::endl;
-    }
+    std::cout << x1.ToString() << std::endl;
 
     return 0;
 }
