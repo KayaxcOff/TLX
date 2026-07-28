@@ -5,6 +5,7 @@ add_library(TLX STATIC
         source/status.cpp
         source/types.cpp
         ../source/string.cpp
+        ../source/file_system.cpp
 )
 
 target_include_directories(TLX PUBLIC
