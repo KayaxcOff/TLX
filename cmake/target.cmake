@@ -1,11 +1,11 @@
 add_library(TLX STATIC
         source/byte.cpp
         source/exception.cpp
+        source/file_system.cpp
         source/memory.cpp
         source/status.cpp
+        source/string.cpp
         source/types.cpp
-        ../source/string.cpp
-        ../source/file_system.cpp
 )
 
 target_include_directories(TLX PUBLIC

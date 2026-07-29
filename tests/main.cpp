@@ -2,20 +2,28 @@
 // Created by muham on 26.07.2026.
 //
 
-#include <tlx/file_system.hpp>
-#include <iostream>
 
-using namespace tlx;
+#include <tlx/file_system.hpp>
+#include <tlx/types.hpp>
+#include <array>
+
+#define N 10
 
 int main() {
-    const fs::Directory directory(fs::path(R"(C:\software\Cpp\projects\TLX\tests\output)"));
-    directory.Init();
+    tlx::fs::Hex hex;
 
-    if (directory.exists()) {
-        std::cout << "Success!" << std::endl;
-    } else {
-        std::cout << "Failed!" << std::endl;
+    std::array<tlx::bfloat16, N> x;
+
+    for (std::size_t i = 0; i < N; ++i) {
+        x[i] = i;
     }
+
+    hex.Set(
+        reinterpret_cast<const std::byte *>(x.data()),
+        N * sizeof(tlx::bfloat16),
+        R"(C:\software\Cpp\projects\TLX\tests\output.hex)"
+    );
+    hex.write();
 
     return 0;
 }

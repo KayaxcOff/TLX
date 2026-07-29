@@ -3,7 +3,9 @@
 //
 
 #include "tlx/file_system.hpp"
+#include <tlx/exception.hpp>
 #include <algorithm>
+#include <fstream>
 
 using namespace tlx::fs;
 
@@ -45,3 +47,63 @@ bool Directory::exists() const {
 const std::filesystem::path &Directory::path() const {
     return this->m_path;
 }
+
+Hex::Hex() {
+    this->m_data = nullptr;
+    this->m_size = 0;
+}
+
+Hex::Hex(const std::byte *data, const std::size_t size) {
+    this->m_data = data;
+    this->m_size = size;
+}
+
+Hex::Hex(const std::byte *data, const std::size_t size, const std::filesystem::path &path) {
+    this->m_data = data;
+    this->m_size = size;
+    this->m_path = path;
+}
+
+Hex::Hex(const Hex &) = default;
+
+Hex::Hex(Hex &&) noexcept = default;
+
+Hex::~Hex() = default;
+
+void Hex::write(const std::byte *data, const std::size_t size, const std::filesystem::path &path) {
+    if (!data) {
+        throw Exception("Data is nullptr");
+    }
+
+    std::ofstream file(path);
+
+    if (!file) {
+        throw Exception("File is nullptr");
+    }
+
+    file << std::hex << std::setfill('0');
+
+    for (std::size_t i = 0; i < size; ++i) {
+        file << std::setw(2) << static_cast<unsigned>(data[i]);
+
+        if ((i + 1) % 16 == 0) {
+            file << '\n';
+        } else if (i + 1 != size) {
+            file << ' ';
+        }
+    }
+}
+
+void Hex::Set(const std::byte *data, const std::size_t size, const std::filesystem::path &path) {
+    this->m_data = data;
+    this->m_size = size;
+    this->m_path = path;
+}
+
+void Hex::write() const {
+    write(this->m_data, this->m_size, this->m_path);
+}
+
+Hex &Hex::operator=(const Hex &) = default;
+
+Hex &Hex::operator=(Hex &&) noexcept = default;
