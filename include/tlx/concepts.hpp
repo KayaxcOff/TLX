@@ -5,6 +5,7 @@
 #ifndef TLX_CONCEPTS_HPP
 #define TLX_CONCEPTS_HPP
 
+#include <tlx/types.hpp>
 #include <type_traits>
 
 namespace tlx {
@@ -38,7 +39,7 @@ namespace tlx {
      * @tparam T The type to check.
      */
     template<typename T>
-    concept integral_t = std::is_integral_v<T>;
+    concept integral = std::is_integral_v<T>;
 
     /**
      * @brief Specifies that a type is a floating-point type.
@@ -48,7 +49,7 @@ namespace tlx {
      * @tparam T The type to check.
      */
     template<typename T>
-    concept float_t = std::is_floating_point_v<T>;
+    concept float_like = std::is_floating_point_v<T> || std::is_same_v<T, bfloat16> || std::is_same_v<T, half>;
 
     /**
      * @brief Specifies that a type is arithmetic (either integral or floating-point).
@@ -59,7 +60,7 @@ namespace tlx {
      * @tparam T The type to check.
      */
     template<typename T>
-    concept arithmetic_like = integral_t<T> || float_t<T>;
+    concept arithmetic_like = integral<T> || float_like<T>;
 
     /**
      * @brief Concept that checks if a type is nothrow destructible and constructible from given arguments.
@@ -71,6 +72,19 @@ namespace tlx {
      */
     template<class Ty, class... Args>
     concept constructible_from = __is_nothrow_destructible(Ty) && __is_constructible(Ty, Args...);
+
+    /**
+     * @brief Specifies that one type is derived from another.
+     *
+     * This concept is satisfied if `Ty1` is publicly and unambiguously
+     * derived from `Ty2` (or is the same as `Ty2`). It is an alias for
+     * `std::derived_from<Ty1, Ty2>`.
+     *
+     * @tparam Ty1 The potential derived type.
+     * @tparam Ty2 The potential base type.
+     */
+    template<class Ty1, class Ty2>
+    concept extend = std::derived_from<Ty1, Ty2>;
 } //namespace tlx
 
 #endif //TLX_CONCEPTS_HPP
