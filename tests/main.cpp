@@ -2,13 +2,20 @@
 // Created by muham on 26.07.2026.
 //
 
-#include <tlx/string.hpp>
+#include <tlx/file_system.hpp>
 #include <iostream>
 
-int main() {
-    const tlx::vstring x1 = "Hello World!";
+using namespace tlx;
 
-    std::cout << x1.ToString() << std::endl;
+int main() {
+    const fs::Directory directory(fs::path(R"(C:\software\Cpp\projects\TLX\tests\output)"));
+    directory.Init();
+
+    if (directory.exists()) {
+        std::cout << "Success!" << std::endl;
+    } else {
+        std::cout << "Failed!" << std::endl;
+    }
 
     return 0;
 }
