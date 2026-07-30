@@ -133,10 +133,40 @@ namespace tlx::fs {
          */
         void write() const;
 
+        [[nodiscard]]
+        const std::filesystem::path& path() const;
+
         Hex& operator=(const Hex&);
         Hex& operator=(Hex&&) noexcept;
     private:
         const std::byte* m_data;
+        std::size_t m_size;
+        std::filesystem::path m_path;
+    };
+
+    class Finger12 {
+    public:
+        Finger12();
+        Finger12(std::byte* data, std::size_t size);
+        Finger12(std::byte* data, std::size_t size, const std::filesystem::path& path);
+        Finger12(const Finger12&);
+        Finger12(Finger12&&) noexcept;
+        ~Finger12();
+
+        static void write(const std::byte* data, std::size_t size, const std::filesystem::path& path);
+        static void read(std::byte* data, std::size_t size, const std::filesystem::path& path);
+
+        void Set(std::byte* data, std::size_t size, const std::filesystem::path& path);
+        void write() const;
+        void read() const;
+
+        [[nodiscard]]
+        const std::filesystem::path& path() const;
+
+        Finger12& operator=(const Finger12&);
+        Finger12& operator=(Finger12&&) noexcept;
+    private:
+        std::byte* m_data;
         std::size_t m_size;
         std::filesystem::path m_path;
     };

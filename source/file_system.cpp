@@ -104,6 +104,109 @@ void Hex::write() const {
     write(this->m_data, this->m_size, this->m_path);
 }
 
+const std::filesystem::path &Hex::path() const {
+    return this->m_path;
+}
+
 Hex &Hex::operator=(const Hex &) = default;
 
 Hex &Hex::operator=(Hex &&) noexcept = default;
+
+namespace {
+    class [[maybe_unused]] BinaryWriter {
+    public:
+        BinaryWriter() = default;
+        ~BinaryWriter() = default;
+
+        static void write(const std::byte *data, const std::size_t size, const std::filesystem::path &path) {
+            std::ofstream file(path, std::ios::binary);
+            if (!file) {
+                throw tlx::Exception("File is nullptr");
+            }
+
+            file.write(
+                reinterpret_cast<const char*>(data),
+                static_cast<std::streamsize>(size)
+            );
+        }
+    };
+
+    class [[maybe_unused]] BinaryReader {
+    public:
+        BinaryReader() = default;
+        ~BinaryReader() = default;
+
+        static void read(std::byte *data, const std::size_t size, const std::filesystem::path &path) {
+            std::ifstream file(path, std::ios::binary);
+
+            if (!file) {
+                throw tlx::Exception("File is nullptr");
+            }
+
+            file.read(
+                reinterpret_cast<char*>(data),
+                static_cast<std::streamsize>(size)
+            );
+        }
+    };
+} //unnamed namespace
+
+Finger12::Finger12() {
+    this->m_data = nullptr;
+    this->m_size = 0;
+}
+
+Finger12::Finger12(std::byte *data, const std::size_t size) {
+    this->m_data = data;
+    this->m_size = size;
+}
+
+Finger12::Finger12(std::byte *data, const std::size_t size, const std::filesystem::path &path) {
+    this->m_data = data;
+    this->m_size = size;
+    this->m_path = path;
+}
+
+Finger12::Finger12(const Finger12 &) = default;
+
+Finger12::Finger12(Finger12 &&) noexcept = default;
+
+Finger12::~Finger12() = default;
+
+void Finger12::write(const std::byte *data, const std::size_t size, const std::filesystem::path &path) {
+    BinaryWriter::write(
+        data,
+        size,
+        path
+    );
+}
+
+void Finger12::read(std::byte *data, const std::size_t size, const std::filesystem::path &path) {
+    BinaryReader::read(
+        data,
+        size,
+        path
+    );
+}
+
+void Finger12::Set(std::byte *data, const std::size_t size, const std::filesystem::path &path) {
+    this->m_data = data;
+    this->m_size = size;
+    this->m_path = path;
+}
+
+void Finger12::write() const {
+    BinaryWriter::write(this->m_data, this->m_size, this->m_path);
+}
+
+void Finger12::read() const {
+    BinaryReader::read(this->m_data, this->m_size, this->m_path);
+}
+
+const std::filesystem::path &Finger12::path() const {
+    return this->m_path;
+}
+
+Finger12 &Finger12::operator=(const Finger12 &) = default;
+
+Finger12 &Finger12::operator=(Finger12 &&) noexcept = default;
