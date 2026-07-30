@@ -3,27 +3,24 @@
 //
 
 
-#include <tlx/file_system.hpp>
+#include <tlx/span.hpp>
 #include <tlx/types.hpp>
-#include <array>
+#include <iostream>
 
 #define N 10
 
 int main() {
-    tlx::fs::Hex hex;
-
-    std::array<tlx::bfloat16, N> x;
+    const auto x1 = new tlx::bfloat16[N];
 
     for (std::size_t i = 0; i < N; ++i) {
-        x[i] = i;
+        x1[i] = static_cast<float>(i);
     }
 
-    hex.Set(
-        reinterpret_cast<const std::byte *>(x.data()),
-        N * sizeof(tlx::bfloat16),
-        R"(C:\software\Cpp\projects\TLX\tests\output.hex)"
-    );
-    hex.write();
+    tlx::Span x2(x1, N);
 
-    return 0;
+    for (const auto& item : x2) {
+        std::cout << item << std::endl;
+    }
+
+    delete[] x1;
 }

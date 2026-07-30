@@ -22,6 +22,11 @@ BufferView::BufferView(const BufferView &other) {
     this->m_size = other.m_size;
 }
 
+BufferView::BufferView(BufferView &&other) noexcept {
+    this->m_data = other.m_data;
+    this->m_size = other.m_size;
+}
+
 BufferView::~BufferView() = default;
 
 std::byte *BufferView::raw() noexcept {
@@ -41,6 +46,14 @@ bool BufferView::empty() const noexcept {
 }
 
 BufferView &BufferView::operator=(const BufferView &other) {
+    if (this != &other) {
+        this->m_data = other.m_data;
+        this->m_size = other.m_size;
+    }
+    return *this;
+}
+
+BufferView &BufferView::operator=(BufferView &&other) noexcept {
     if (this != &other) {
         this->m_data = other.m_data;
         this->m_size = other.m_size;

@@ -30,7 +30,7 @@ namespace tlx {
          */
         BufferView(std::byte* data, std::size_t size);
         BufferView(const BufferView& other);
-        BufferView(BufferView&&) noexcept = delete;
+        BufferView(BufferView&& other) noexcept;
         ~BufferView();
 
         /**
@@ -80,7 +80,7 @@ namespace tlx {
         bool empty() const noexcept;
 
         BufferView& operator=(const BufferView& other);
-        BufferView& operator=(BufferView&&) noexcept = delete;
+        BufferView& operator=(BufferView&& other) noexcept;
     private:
         std::byte* m_data;
         std::size_t m_size;
