@@ -95,7 +95,7 @@ namespace tlx {
      * @param end Upper bound (inclusive).
      * @return true if start ≤ value ≤ end.
      */
-    template<integral_t T>
+    template<integral T>
     [[nodiscard]]
     constexpr bool between(const T& value, const T& start, const T& end) noexcept {
         return start <= value && value <= end;
