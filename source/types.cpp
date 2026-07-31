@@ -24,4 +24,14 @@ namespace tlx {
         os << std::fixed << static_cast<std::int32_t>(value);
         return os;
     }
+
+    std::ostream& operator<<(std::ostream& os, const quint16& value) {
+        os << std::fixed << static_cast<std::uint32_t>(value);
+        return os;
+    }
+
+    std::ostream& operator<<(std::ostream& os, const quint8& value) {
+        os << std::fixed << static_cast<std::uint32_t>(value);
+        return os;
+    }
 } //namespace tlx

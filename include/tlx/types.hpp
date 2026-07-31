@@ -400,6 +400,166 @@ namespace tlx {
     };
 
     std::ostream& operator<<(std::ostream& os, const qint8& value);
+
+    /**
+     * @brief 16-bit unsigned quantized integer type.
+     *
+     * This type stores an unsigned 16-bit integer. Arithmetic and comparison
+     * operations are performed using the underlying 16-bit values.
+     * It is aligned to 2 bytes and is usable on both host and device
+     * (via the `TLX_HD` macro).
+     */
+    struct alignas(2) quint16 {
+        TLX_HD quint16() = default;
+        TLX_HD quint16(const std::uint16_t value) {
+            this->m_value = value;
+        }
+        TLX_HD quint16(const std::int32_t value) {
+            this->m_value = static_cast<std::uint16_t>(value);
+        }
+        TLX_HD quint16(const quint16&) = default;
+        TLX_HD quint16(quint16&&) noexcept = default;
+
+        TLX_HD operator std::uint32_t() const noexcept {
+            return this->m_value;
+        }
+
+        TLX_HD quint16 operator+(const quint16& other) const noexcept {
+            return static_cast<std::uint16_t>(*this) + static_cast<std::uint16_t>(other);
+        }
+        TLX_HD quint16 operator-(const quint16& other) const noexcept {
+            return static_cast<std::uint16_t>(*this) - static_cast<std::uint16_t>(other);
+        }
+        TLX_HD quint16 operator*(const quint16& other) const noexcept {
+            return static_cast<std::uint16_t>(*this) * static_cast<std::uint16_t>(other);
+        }
+        TLX_HD quint16 operator/(const quint16& other) const noexcept {
+            return static_cast<std::uint16_t>(*this) / static_cast<std::uint16_t>(other);
+        }
+
+        TLX_HD quint16& operator+=(const quint16& other) {
+            *this = *this + other;
+            return *this;
+        }
+        TLX_HD quint16& operator-=(const quint16& other) {
+            *this = *this - other;
+            return *this;
+        }
+        TLX_HD quint16& operator*=(const quint16& other) {
+            *this = *this * other;
+            return *this;
+        }
+        TLX_HD quint16& operator/=(const quint16& other) {
+            *this = *this / other;
+            return *this;
+        }
+
+        TLX_HD bool operator==(const quint16& other) const noexcept {
+            return static_cast<std::uint16_t>(*this) == static_cast<std::uint16_t>(other);
+        }
+        TLX_HD bool operator!=(const quint16& other) const noexcept {
+            return static_cast<std::uint16_t>(*this) != static_cast<std::uint16_t>(other);
+        }
+        TLX_HD bool operator<(const quint16& other) const noexcept {
+            return static_cast<std::uint16_t>(*this) < static_cast<std::uint16_t>(other);
+        }
+        TLX_HD bool operator<=(const quint16& other) const noexcept {
+            return static_cast<std::uint16_t>(*this) <= static_cast<std::uint16_t>(other);
+        }
+        TLX_HD bool operator>(const quint16& other) const noexcept {
+            return static_cast<std::uint16_t>(*this) > static_cast<std::uint16_t>(other);
+        }
+        TLX_HD bool operator>=(const quint16& other) const noexcept {
+            return static_cast<std::uint16_t>(*this) >= static_cast<std::uint16_t>(other);
+        }
+
+        TLX_HD quint16& operator=(const quint16&) = default;
+        TLX_HD quint16& operator=(quint16&&) noexcept = default;
+    private:
+        std::uint16_t m_value;
+    };
+
+    std::ostream& operator<<(std::ostream& os, const quint16& value);
+
+    /**
+     * @brief 8-bit unsigned quantized integer type.
+     *
+     * This type stores an unsigned 8-bit integer. Arithmetic and comparison
+     * operations are performed using the underlying 8-bit values.
+     * It is aligned to 1 byte and is usable on both host and device
+     * (via the `TLX_HD` macro).
+     */
+    struct alignas(1) quint8 {
+        TLX_HD quint8() = default;
+        TLX_HD quint8(const std::uint8_t value) {
+            this->m_value = value;
+        }
+        TLX_HD quint8(const std::int32_t value) {
+            this->m_value = static_cast<std::uint8_t>(value);
+        }
+        TLX_HD quint8(const quint8&) = default;
+        TLX_HD quint8(quint8&&) noexcept = default;
+
+        TLX_HD operator std::uint32_t() const noexcept {
+            return this->m_value;
+        }
+
+        TLX_HD quint8 operator+(const quint8& other) const noexcept {
+            return static_cast<std::uint8_t>(*this) + static_cast<std::uint8_t>(other);
+        }
+        TLX_HD quint8 operator-(const quint8& other) const noexcept {
+            return static_cast<std::uint8_t>(*this) - static_cast<std::uint8_t>(other);
+        }
+        TLX_HD quint8 operator*(const quint8& other) const noexcept {
+            return static_cast<std::uint8_t>(*this) * static_cast<std::uint8_t>(other);
+        }
+        TLX_HD quint8 operator/(const quint8& other) const noexcept {
+            return static_cast<std::uint8_t>(*this) / static_cast<std::uint8_t>(other);
+        }
+
+        TLX_HD quint8& operator+=(const quint8& other) {
+            *this = *this + other;
+            return *this;
+        }
+        TLX_HD quint8& operator-=(const quint8& other) {
+            *this = *this - other;
+            return *this;
+        }
+        TLX_HD quint8& operator*=(const quint8& other) {
+            *this = *this * other;
+            return *this;
+        }
+        TLX_HD quint8& operator/=(const quint8& other) {
+            *this = *this / other;
+            return *this;
+        }
+
+        TLX_HD bool operator==(const quint8& other) const noexcept {
+            return static_cast<std::uint8_t>(*this) == static_cast<std::uint8_t>(other);
+        }
+        TLX_HD bool operator!=(const quint8& other) const noexcept {
+            return static_cast<std::uint8_t>(*this) != static_cast<std::uint8_t>(other);
+        }
+        TLX_HD bool operator<(const quint8& other) const noexcept {
+            return static_cast<std::uint8_t>(*this) < static_cast<std::uint8_t>(other);
+        }
+        TLX_HD bool operator<=(const quint8& other) const noexcept {
+            return static_cast<std::uint8_t>(*this) <= static_cast<std::uint8_t>(other);
+        }
+        TLX_HD bool operator>(const quint8& other) const noexcept {
+            return static_cast<std::uint8_t>(*this) > static_cast<std::uint8_t>(other);
+        }
+        TLX_HD bool operator>=(const quint8& other) const noexcept {
+            return static_cast<std::uint8_t>(*this) >= static_cast<std::uint8_t>(other);
+        }
+
+        TLX_HD quint8& operator=(const quint8&) = default;
+        TLX_HD quint8& operator=(quint8&&) noexcept = default;
+    private:
+        std::uint8_t m_value;
+    };
+
+    std::ostream& operator<<(std::ostream& os, const quint8& value);
 } //namespace tlx
 
 #endif //TLX_TYPES_HPP

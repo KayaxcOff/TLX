@@ -7,10 +7,10 @@
 #include <iostream>
 
 int main() {
-    const tlx::qint8 x1 = 10;
+    const tlx::quint8 x = 10;
 
-    std::cout << "value: " << x1 << std::endl;
-    std::cout << "size: " << sizeof(x1) << " bytes" << std::endl;
+    std::cout << "value: " << x << std::endl;
+    std::cout << "size: " << sizeof(x) << std::endl;
 
     return 0;
 }
