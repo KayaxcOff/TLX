@@ -144,22 +144,79 @@ namespace tlx::fs {
         std::filesystem::path m_path;
     };
 
+    /**
+     * @brief Utility class for reading and writing raw binary data to/from files.
+     *
+     * This class stores a non-owning pointer to a byte buffer together with an
+     * optional file path. It provides both static and member functions for
+     * binary read/write operations. The actual I/O is delegated to internal
+     * helper classes (`BinaryWriter` / `BinaryReader`).
+     */
     class Finger12 {
     public:
         Finger12();
+        /**
+         * @brief Constructs a Finger12 from a byte buffer (no path).
+         *
+         * @param data Pointer to the beginning of the byte buffer.
+         * @param size Number of bytes in the buffer.
+         */
         Finger12(std::byte* data, std::size_t size);
+        /**
+         * @brief Constructs a Finger12 from a byte buffer and a file path.
+         *
+         * @param data Pointer to the beginning of the byte buffer.
+         * @param size Number of bytes in the buffer.
+         * @param path Filesystem path used for subsequent read/write operations.
+         */
         Finger12(std::byte* data, std::size_t size, const std::filesystem::path& path);
         Finger12(const Finger12&);
         Finger12(Finger12&&) noexcept;
         ~Finger12();
 
+        /**
+         * @brief Writes a byte buffer to a file in binary mode.
+         *
+         * @param data Pointer to the beginning of the byte buffer.
+         * @param size Number of bytes to write.
+         * @param path Destination file path.
+         */
         static void write(const std::byte* data, std::size_t size, const std::filesystem::path& path);
+        /**
+         * @brief Reads binary data from a file into a byte buffer.
+         *
+         * @param data Pointer to the destination buffer.
+         * @param size Number of bytes to read.
+         * @param path Source file path.
+         */
         static void read(std::byte* data, std::size_t size, const std::filesystem::path& path);
 
+        /**
+         * @brief Sets the internal buffer pointer, size and file path.
+         *
+         * @param data Pointer to the beginning of the byte buffer.
+         * @param size Number of bytes in the buffer.
+         * @param path Filesystem path used for subsequent read/write operations.
+         */
         void Set(std::byte* data, std::size_t size, const std::filesystem::path& path);
+        /**
+         * @brief Writes the currently stored buffer to the stored path.
+         *
+         * Equivalent to calling the static `write()` with the internal members.
+         */
         void write() const;
+        /**
+         * @brief Reads data from the stored path into the currently stored buffer.
+         *
+         * Equivalent to calling the static `read()` with the internal members.
+         */
         void read() const;
 
+        /**
+         * @brief Returns the currently stored file path.
+         *
+         * @return const std::filesystem::path& Reference to the stored path.
+         */
         [[nodiscard]]
         const std::filesystem::path& path() const;
 

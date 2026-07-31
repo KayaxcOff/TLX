@@ -3,24 +3,14 @@
 //
 
 
-#include <tlx/span.hpp>
 #include <tlx/types.hpp>
 #include <iostream>
 
-#define N 10
-
 int main() {
-    const auto x1 = new tlx::bfloat16[N];
+    const tlx::qint8 x1 = 10;
 
-    for (std::size_t i = 0; i < N; ++i) {
-        x1[i] = static_cast<float>(i);
-    }
+    std::cout << "value: " << x1 << std::endl;
+    std::cout << "size: " << sizeof(x1) << " bytes" << std::endl;
 
-    tlx::Span x2(x1, N);
-
-    for (const auto& item : x2) {
-        std::cout << item << std::endl;
-    }
-
-    delete[] x1;
+    return 0;
 }
