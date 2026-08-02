@@ -68,6 +68,7 @@ namespace tlx {
                 ::tlx::construct(data() + i, ::tlx::move(other[i]));
                 ::tlx::destroy(other.data() + i);
             }
+            other.m_size = 0;
         }
         TLX_HD ~vec() {
             clear();
@@ -128,19 +129,19 @@ namespace tlx {
             return data() + this->size();
         }
         [[nodiscard]]
-        const T* begin() const noexcept {
+        TLX_HD const T* begin() const noexcept {
             return data();
         }
         [[nodiscard]]
-        const T* end() const noexcept {
+        TLX_HD const T* end() const noexcept {
             return data() + this->size();
         }
         [[nodiscard]]
-        const T* cbegin() const noexcept {
+        TLX_HD const T* cbegin() const noexcept {
             return data();
         }
         [[nodiscard]]
-        const T* cend() const noexcept {
+        TLX_HD const T* cend() const noexcept {
             return data() + this->size();
         }
         /**
@@ -149,7 +150,7 @@ namespace tlx {
          * @note Undefined behavior if the vector is empty.
          */
         [[nodiscard]]
-        const T& first() const noexcept {
+        TLX_HD const T& first() const noexcept {
             return data()[0];
         }
         /**
@@ -158,7 +159,7 @@ namespace tlx {
          * @note Undefined behavior if the vector is empty.
          */
         [[nodiscard]]
-        const T& last() const noexcept {
+        TLX_HD const T& last() const noexcept {
             return data()[this->m_size - 1];
         }
 
@@ -319,7 +320,7 @@ namespace tlx {
             return data() + index;
         }
 
-        TLX_HD explicit operator std::vector<T>() noexcept {
+        TLX_HOST explicit operator std::vector<T>() noexcept {
             return {begin(), end()};
         }
 

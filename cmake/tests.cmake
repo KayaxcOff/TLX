@@ -23,3 +23,7 @@ if (TLX_CUDA)
             ${CUDA_LIBRARIES}
     )
 endif ()
+
+target_compile_options(TLX_CUDA_TEST PRIVATE
+        $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr>
+)

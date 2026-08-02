@@ -2,36 +2,32 @@
 // Created by muham on 27.07.2026.
 //
 
+#include <tlx/vector.hpp>
 #include <tlx/types.hpp>
 #include <cuda_runtime.h>
-#include <cassert>
+#include <iostream>
 
-using tlx::bfloat16;
+__global__ void test_kernel(const __nv_bfloat16 x, std::size_t* output_size) {
+    tlx::vec<tlx::bfloat16, 10> v;
 
-#define N 1000
+    v.push(x);
+    v.push(x);
+    v.push(x);
 
-__global__
-void add_kernel(const __nv_bfloat16 a, const __nv_bfloat16 b, bfloat16* c) {
-    *c = a + b;
+    *output_size = v.size();
 }
 
-int main(int argc, char** argv) {
-    const bfloat16 a = 1.0f;
-    const bfloat16 b = 2.0f;
+int main() {
+    const tlx::bfloat16 v = 1.0f;
+    std::size_t* d_out;
+    cudaMalloc(&d_out, sizeof(std::size_t));
 
-    bfloat16* d_out;
-    cudaMalloc(&d_out, sizeof(bfloat16));
+    test_kernel<<<1, 1>>>(v, d_out);
 
-    add_kernel<<<1,1>>>(a, b, d_out);
+    std::size_t h_out;
+    cudaMemcpy(&h_out, d_out, sizeof(std::size_t), cudaMemcpyDeviceToHost);
 
-    bfloat16 result;
-    cudaMemcpy(&result, d_out, sizeof(result), cudaMemcpyDeviceToHost);
-
-    cudaDeviceSynchronize();
-
-    assert(static_cast<float>(result) == 3.0f);
-
-    cudaFree(d_out);
+    std::cout << "output: " << h_out << std::endl;
 
     return 0;
 }
