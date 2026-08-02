@@ -59,7 +59,7 @@ namespace tlx {
         TLX_HD vec(const vec& other) : m_data{} {
             this->m_size = other.m_size;
             for (std::size_t i = 0; i < this->m_size; i++) {
-                ::tlx::construct(data() + i, other.data() + i);
+                ::tlx::construct(data() + i, other[i]);
             }
         }
         TLX_HD vec(vec&& other) noexcept : m_data{} {

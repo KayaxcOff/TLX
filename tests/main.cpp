@@ -7,18 +7,30 @@
 #include <iostream>
 
 int main() {
-    tlx::vec<tlx::vstring, 5> x;
+    tlx::vec<tlx::vstring, 5> x1;
 
-    x.push("C++");
-    x.push("Python");
-    x.push("Java");
-    x.push("Rust");
-    x.push("C#");
-    //x.push("JavaScript");
+    x1.push("C++");
+    x1.push("Python");
+    x1.push("Java");
+    x1.push("Rust");
+    x1.push("C#");
 
-    for (const auto& item : x) {
+    auto x2 = x1;
+
+    for (const auto& item : x2) {
         std::cout << item << std::endl;
     }
 
     return 0;
 }
+/*
+output:
+C:\software\Cpp\projects\TLX\cmake-build-debug-visual-studio\TLX_HOST_TEST.exe
+C++
+Python
+Java
+Rust
+C#
+
+Process finished with exit code 0
+*/
