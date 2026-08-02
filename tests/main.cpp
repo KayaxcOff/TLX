@@ -3,15 +3,18 @@
 //
 
 #include <tlx/vector.hpp>
+#include <tlx/string.hpp>
 #include <iostream>
-#include <string>
 
 int main() {
-    tlx::vec<std::string, 3> x;
+    tlx::vec<tlx::vstring, 5> x;
 
-    x.emplace("C++");
-    x.emplace("Python");
-    x.emplace("Java");
+    x.push("C++");
+    x.push("Python");
+    x.push("Java");
+    x.push("Rust");
+    x.push("C#");
+    //x.push("JavaScript");
 
     for (const auto& item : x) {
         std::cout << item << std::endl;

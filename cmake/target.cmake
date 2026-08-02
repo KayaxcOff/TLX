@@ -1,5 +1,6 @@
 add_library(TLX STATIC
-        source/byte.cpp
+        source/buffer.cpp
+        source/errors.cpp
         source/exception.cpp
         source/file_system.cpp
         source/memory.cpp
