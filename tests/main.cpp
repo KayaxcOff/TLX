@@ -3,34 +3,21 @@
 //
 
 #include <tlx/vector.hpp>
-#include <tlx/string.hpp>
+#include <tlx/random.hpp>
+#include <tlx/types.hpp>
 #include <iostream>
 
 int main() {
-    tlx::vec<tlx::vstring, 5> x1;
+    tlx::vec<tlx::bfloat16, 10> x(10);
+    tlx::philox4x32 rng(1);
 
-    x1.push("C++");
-    x1.push("Python");
-    x1.push("Java");
-    x1.push("Rust");
-    x1.push("C#");
+    for (auto& item : x) {
+        item = rng.next<tlx::bfloat16>();
+    }
 
-    auto x2 = x1;
-
-    for (const auto& item : x2) {
+    for (const auto& item : x) {
         std::cout << item << std::endl;
     }
 
     return 0;
 }
-/*
-output:
-C:\software\Cpp\projects\TLX\cmake-build-debug-visual-studio\TLX_HOST_TEST.exe
-C++
-Python
-Java
-Rust
-C#
-
-Process finished with exit code 0
-*/
