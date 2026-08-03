@@ -60,7 +60,7 @@ namespace tlx {
      * @tparam T The type to check.
      */
     template<typename T>
-    concept arithmetic_like = integral<T> || float_like<T>;
+    concept arithmetic_like = integral<T> || float_like<T> || std::is_same_v<T, qint16> || std::is_same_v<T, qint8> || std::is_same_v<T, quint16> || std::is_same_v<T, quint8>;
 
     /**
      * @brief Concept that checks if a type is nothrow destructible and constructible from given arguments.
