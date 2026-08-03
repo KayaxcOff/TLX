@@ -1,27 +1,27 @@
-target_compile_options(${PROJECT_NAME} PRIVATE
+target_compile_options(TLX PRIVATE
         $<$<CONFIG:Release>:/arch:AVX2>
 )
 
-target_compile_options(${PROJECT_NAME} PRIVATE
+target_compile_options(TLX PRIVATE
         $<$<AND:$<CONFIG:Release>,$<COMPILE_LANGUAGE:CUDA>>:
-        --expt-relaxed-constexpr
+            --expt-relaxed-constexpr
         >
 )
 
-target_compile_options(${PROJECT_NAME} PRIVATE
+target_compile_options(TLX PRIVATE
         $<$<CONFIG:Debug>:
-        /arch:AVX2
-        /W4
-        /Zi
-        /permissive-
+            /arch:AVX2
+            /W4
+            /Zi
+            /permissive-
         >
 )
 
-target_compile_options(${PROJECT_NAME} PRIVATE
+target_compile_options(TLX PRIVATE
         $<$<AND:$<CONFIG:Debug>,$<COMPILE_LANGUAGE:CUDA>>:
-        --expt-relaxed-constexpr
-        -G
-        -lineinfo
+            --expt-relaxed-constexpr
+            -G
+            -lineinfo
         >
 )
 

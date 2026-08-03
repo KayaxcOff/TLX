@@ -13,7 +13,7 @@
 #else //#ifdef TLX_CUDA
     #include <bit>
     using std::bit_cast;
-#endif //#ifdef TLX_CUDA #€lse
+#endif //#ifdef TLX_CUDA #else
 
 namespace tlx::bit {
     /**

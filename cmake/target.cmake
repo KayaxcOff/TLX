@@ -9,12 +9,16 @@ add_library(TLX STATIC
         source/types.cpp
 )
 
-target_include_directories(TLX PUBLIC
-    ${CMAKE_SOURCE_DIR}/include
+add_library(TLX::TLX ALIAS TLX)
+
+target_include_directories(TLX
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
 )
 
 if (TLX_CUDA)
-    target_link_libraries(TLX PRIVATE
+    target_link_libraries(TLX PUBLIC
         ${CUDA_LIBRARIES}
     )
 
