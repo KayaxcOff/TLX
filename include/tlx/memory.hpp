@@ -209,17 +209,6 @@ namespace tlx {
         }
 
         /**
-         * @brief Creates a ptr from a raw value reinterpreted as a pointer.
-         *
-         * @param t Value to reinterpret as a pointer.
-         * @return ptr Newly created pointer.
-         */
-        [[nodiscard]]
-        static ptr cast(T t) {
-            return ptr(reinterpret_cast<T*>(t));
-        }
-
-        /**
          * @brief Returns the managed raw pointer.
          *
          * @return T* Pointer to the managed object.
@@ -261,6 +250,31 @@ namespace tlx {
     private:
         T* m_value;
     };
+
+    template<typename T>
+    [[nodiscard]]
+    constexpr ptr<T> make_ptr(T* t) {
+        return ptr<T>(t);
+    }
+
+    template<class Ty>
+    [[nodiscard]]
+    constexpr Ty* next(Ty* ptr, std::ptrdiff_t n = 1) noexcept {
+        return ptr + n;
+    }
+    template<class Ty>
+    [[nodiscard]]
+    constexpr Ty* prev(Ty* ptr, std::ptrdiff_t n = 1) noexcept {
+        return ptr - n;
+    }
+
+    template<class Ty>
+    constexpr Ty* copy(const Ty* first, const Ty* last, Ty* dest) {
+        while (first != last) {
+            *dest++ = *first++;
+        }
+        return dest;
+    }
 } //namespace tlx
 
 #endif //TLX_MEMORY_HPP

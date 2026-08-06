@@ -11,8 +11,6 @@
 #include <string_view>
 
 namespace tlx {
-    constexpr std::size_t npos = static_cast<std::size_t>(-1);
-
     /**
      * @brief A non-owning view over a contiguous sequence of characters.
      *
@@ -23,10 +21,12 @@ namespace tlx {
      */
     class vstring {
     public:
+        constexpr static std::size_t npos = static_cast<std::size_t>(-1);
+
         /**
          * @brief Default constructor. Creates an empty view.
          */
-        TLX_HD vstring() {
+        TLX_HD constexpr vstring() {
             this->m_data = nullptr;
             this->m_size = 0;
         }
@@ -36,7 +36,7 @@ namespace tlx {
          * @param data Pointer to the first character.
          * @param size Number of characters in the view.
          */
-        TLX_HD vstring(const char* data, const std::size_t size) {
+        TLX_HD constexpr vstring(const char* data, const std::size_t size) {
             this->m_data = data;
             this->m_size = size;
         }
@@ -49,7 +49,7 @@ namespace tlx {
          * @param data Character array.
          */
         template<std::size_t N>
-        TLX_HD vstring(const char (&data)[N]) {
+        TLX_HD constexpr vstring(const char (&data)[N]) {
             this->m_data = data;
             this->m_size = N - 1;
         }
@@ -58,7 +58,11 @@ namespace tlx {
          *
          * @param data Source string.
          */
-        vstring(const std::string &data) {
+        constexpr vstring(const std::string &data) {
+            this->m_data = data.data();
+            this->m_size = data.size();
+        }
+        constexpr vstring(const std::string_view& data) {
             this->m_data = data.data();
             this->m_size = data.size();
         }
@@ -71,7 +75,7 @@ namespace tlx {
          * @return const char* Pointer to the first character.
          */
         [[nodiscard]]
-        TLX_HD const char* data() const noexcept {
+        TLX_HD constexpr const char* data() const noexcept {
             return this->m_data;
         }
         /**
@@ -80,7 +84,7 @@ namespace tlx {
          * @return const char* Pointer to the first character.
          */
         [[nodiscard]]
-        TLX_HD const char* c() const noexcept {
+        TLX_HD constexpr const char* c() const noexcept {
             return this->m_data;
         }
         /**
@@ -89,7 +93,7 @@ namespace tlx {
          * @return std::size_t Length of the string view.
          */
         [[nodiscard]]
-        TLX_HD std::size_t size() const noexcept {
+        TLX_HD constexpr std::size_t size() const noexcept {
             return this->m_size;
         }
         /**
@@ -98,7 +102,7 @@ namespace tlx {
          * @return true if the size is zero.
          */
         [[nodiscard]]
-        TLX_HD bool empty() const noexcept {
+        TLX_HD constexpr bool empty() const noexcept {
             return this->m_size == 0;
         }
         /**
@@ -107,7 +111,7 @@ namespace tlx {
          * @return const char* Pointer to the first character.
          */
         [[nodiscard]]
-        TLX_HD const char* begin() const noexcept {
+        TLX_HD constexpr const char* begin() const noexcept {
             return this->m_data;
         }
         /**
@@ -116,7 +120,7 @@ namespace tlx {
          * @return const char* Pointer one past the last character.
          */
         [[nodiscard]]
-        TLX_HD const char* end() const noexcept {
+        TLX_HD constexpr const char* end() const noexcept {
             return this->m_data + this->m_size;
         }
         /**
@@ -125,7 +129,7 @@ namespace tlx {
          * @return const char* Pointer to the first character.
          */
         [[nodiscard]]
-        TLX_HD const char* cbegin() const noexcept {
+        TLX_HD constexpr const char* cbegin() const noexcept {
             return this->m_data;
         }
         /**
@@ -134,7 +138,7 @@ namespace tlx {
          * @return const char* Pointer one past the last character.
          */
         [[nodiscard]]
-        TLX_HD const char* cend() const noexcept {
+        TLX_HD constexpr const char* cend() const noexcept {
             return this->m_data + this->m_size;
         }
         /**
@@ -144,7 +148,7 @@ namespace tlx {
          * @note Undefined behavior if the view is empty.
          */
         [[nodiscard]]
-        const char& front() const noexcept {
+        TLX_HD constexpr const char& front() const noexcept {
             return this->m_data[0];
         }
         /**
@@ -154,7 +158,7 @@ namespace tlx {
          * @note Undefined behavior if the view is empty.
          */
         [[nodiscard]]
-        const char& back() const noexcept {
+        TLX_HD constexpr const char& back() const noexcept {
             return this->m_data[this->m_size - 1];
         }
         /**
@@ -165,7 +169,7 @@ namespace tlx {
          * @note Undefined behavior if the view is empty.
          */
         [[nodiscard]]
-        TLX_HD bool start_with(const char& value) const {
+        TLX_HD constexpr bool start_with(const char& value) const {
             return this->m_data[0] == value;
         }
         /**
@@ -176,8 +180,17 @@ namespace tlx {
          * @note Undefined behavior if the view is empty.
          */
         [[nodiscard]]
-        TLX_HD bool end_with(const char& value) const {
+        TLX_HD constexpr bool end_with(const char& value) const {
             return this->m_data[this->m_size - 1] == value;
+        }
+        [[nodiscard]]
+        TLX_HD constexpr bool contains(const char idx) const noexcept {
+            for (std::size_t i = 0; i < this->m_size; ++i) {
+                if (this->m_data[i] == idx) {
+                    return true;
+                }
+            }
+            return false;
         }
         /**
          * @brief Returns a substring view.
@@ -188,7 +201,7 @@ namespace tlx {
          *         Returns an empty view if `pos` is out of range.
          */
         [[nodiscard]]
-        TLX_HD vstring substr(const std::size_t pos, const std::size_t count = npos) const noexcept {
+        TLX_HD constexpr vstring substr(const std::size_t pos, const std::size_t count = npos) const noexcept {
             if (pos >= this->m_size) {
                 return {};
             }
@@ -204,18 +217,19 @@ namespace tlx {
          * @return std::string A new string containing a copy of the viewed characters.
          */
         [[nodiscard]]
-        std::string ToString() const {
+        constexpr std::string str() const {
             return {this->m_data, this->m_size};
         }
 
-        operator std::string_view() const noexcept {
+        [[nodiscard]]
+        constexpr operator std::string_view() const noexcept {
             return {this->m_data, this->m_size};
         }
 
-        TLX_HD const char &operator[](const std::size_t index) const noexcept {
+        TLX_HD constexpr const char &operator[](const std::size_t index) const noexcept {
             return this->m_data[index];
         }
-        TLX_HD bool operator==(const vstring &other) const noexcept {
+        TLX_HD constexpr bool operator==(const vstring &other) const noexcept {
             if (this->m_size != other.m_size) {
                 return false;
             }
@@ -226,7 +240,7 @@ namespace tlx {
             }
             return true;
         }
-        TLX_HD bool operator!=(const vstring &other) const noexcept {
+        TLX_HD constexpr bool operator!=(const vstring &other) const noexcept {
             return !((*this) == other);
         }
         TLX_HD vstring& operator=(const vstring&) = default;
