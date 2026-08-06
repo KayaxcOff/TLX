@@ -56,6 +56,15 @@ namespace tlx {
                 i++;
             }
         }
+        explicit vec(const std::vector<T>& vector) : m_data{} {
+            TLX_HD_ERROR(vector.size() > N, "Vector size too large");
+            this->m_size = vector.size();
+            std::size_t i = 0;
+            for (const auto& item : vector) {
+                ::tlx::construct(data() + i, item);
+                i++;
+            }
+        }
         TLX_HD vec(const vec& other) : m_data{} {
             this->m_size = other.m_size;
             for (std::size_t i = 0; i < this->m_size; i++) {
@@ -351,7 +360,7 @@ namespace tlx {
                 this->m_size = other.m_size;
                 for (std::size_t i = 0; i < this->m_size; i++) {
                     ::tlx::construct(data() + i, ::tlx::move(other[i]));
-                    ::tlx::destroy(other[i]);
+                    ::tlx::destroy(other.data() + i);
                 }
                 other.m_size = 0;
             }
