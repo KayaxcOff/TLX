@@ -6,14 +6,8 @@
 #define TLX_BIT_HPP
 
 #include <tlx/macros.hpp>
+#include <bit>
 #include <cstdint>
-#ifdef TLX_CUDA
-    #include <cuda/std/bit>
-    using cuda::std::bit_cast;
-#else //#ifdef TLX_CUDA
-    #include <bit>
-    using std::bit_cast;
-#endif //#ifdef TLX_CUDA #else
 
 namespace tlx::bit {
     /**
@@ -28,7 +22,7 @@ namespace tlx::bit {
      */
     [[nodiscard]]
     TLX_HD inline std::uint16_t float_to_half_bits(const float value) noexcept {
-        const auto bits = bit_cast<std::uint32_t>(value);
+        const auto bits = std::bit_cast<std::uint32_t>(value);
 
         const std::uint32_t sign = (bits >> 16) & 0x8000u;
         auto exp = static_cast<std::int32_t>((bits >> 23) & 0xFFu);
@@ -131,7 +125,7 @@ namespace tlx::bit {
             result = sign | (exp << 23) | (mantissa << 13);
         }
 
-        return bit_cast<float>(result);
+        return std::bit_cast<float>(result);
     }
 
     /**
@@ -147,7 +141,7 @@ namespace tlx::bit {
      */
     [[nodiscard]]
     TLX_HD TLX_INLINE std::uint16_t float_to_bf16_bits(const float value) noexcept {
-        auto f_bits = bit_cast<std::uint32_t>(value);
+        auto f_bits = std::bit_cast<std::uint32_t>(value);
         f_bits += 0x7FFFu + ((f_bits >> 16) & 1u);
         return static_cast<std::uint16_t>(f_bits >> 16);
     }
@@ -164,7 +158,7 @@ namespace tlx::bit {
     [[nodiscard]]
     TLX_HD TLX_INLINE float bf16_to_float_bits(const std::uint16_t value) noexcept {
         const std::uint32_t f_bits = static_cast<std::uint32_t>(value) << 16;
-        return bit_cast<float>(f_bits);
+        return std::bit_cast<float>(f_bits);
     }
 } //namespace tlx::bit
 

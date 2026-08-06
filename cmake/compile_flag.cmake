@@ -26,7 +26,5 @@ target_compile_options(TLX PRIVATE
 )
 
 target_compile_options(TLX PUBLIC
-        $<$<COMPILE_LANGUAGE:CXX>:/Zc:preprocessor>
-        $<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=/Zc:preprocessor>
         $<$<COMPILE_LANGUAGE:CUDA>:-diag-suppress=20012>
 )

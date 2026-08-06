@@ -55,19 +55,19 @@ namespace tlx {
         TLX_HD T next() noexcept {
             if constexpr (integral<T>) {
                 if constexpr (sizeof(T) <= 4) {
-                    return static_cast<T>(this->next_u32());
+                    return static_cast<T>(next_u32());
                 } else {
-                    const std::uint64_t lo = this->next_u32();
-                    const std::uint64_t hi = this->next_u32();
+                    const std::uint64_t lo = next_u32();
+                    const std::uint64_t hi = next_u32();
                     return static_cast<T>((hi << 32) | lo);
                 }
             } else {
                 if constexpr (sizeof(T) <= 4) {
-                    return this->u32_to_unit_float<T>(this->next_u32());
+                    return u32_to_unit_float<T>(next_u32());
                 } else {
-                    const std::uint32_t lo = this->next_u32();
-                    const std::uint32_t hi = this->next_u32();
-                    return this->u64_to_unit_double((static_cast<std::uint64_t>(hi) << 32) | lo);
+                    const std::uint32_t lo = next_u32();
+                    const std::uint32_t hi = next_u32();
+                    return u64_to_unit_double((static_cast<std::uint64_t>(hi) << 32) | lo);
                 }
             }
         }
@@ -85,7 +85,7 @@ namespace tlx {
         template<arithmetic_like T>
         [[nodiscard]]
         TLX_HD T uniform() noexcept {
-            return this->next<T>();
+            return next<T>();
         }
 
         /**
@@ -101,10 +101,10 @@ namespace tlx {
         TLX_HD T uniform(const T lo, const T hi) noexcept {
             TLX_HD_ERROR(hi <= lo, "uniform: hi must be greater than lo");
             if constexpr (float_like<T>) {
-                return lo + this->next<T>() * (hi - lo);
+                return lo + next<T>() * (hi - lo);
             } else {
                 const auto range = static_cast<std::uint64_t>(hi) - static_cast<uint64_t>(lo);
-                return static_cast<T>(lo + static_cast<std::uint64_t>(this->next_u32()) % range);
+                return static_cast<T>(lo + static_cast<std::uint64_t>(next_u32()) % range);
             }
         }
 
@@ -122,7 +122,7 @@ namespace tlx {
             n -= available;
             const std::uint64_t blocks = n / 4;
             this->bump_counter(blocks);
-            this->m_buffer = this->generate_block();
+            this->m_buffer = generate_block();
             this->m_buffer_index = static_cast<int>(n % 4);
         }
 
@@ -160,7 +160,9 @@ namespace tlx {
             std::uint32_t k0 = this->m_key[0];
             std::uint32_t k1 = this->m_key[1];
 
-            #pragma unroll
+            #if defined(__CUDA_ARCH__)
+                #pragma unroll
+            #endif //#if defined(__CUDA_ARCH__)
             for (int round = 0; round < 10; round++) {
                 std::uint32_t hi0, lo0, hi1, lo1;
                 mulhilo32(PHILOX_M4x32_0, c0, hi0, lo0);
@@ -204,8 +206,8 @@ namespace tlx {
          */
         TLX_HD std::uint32_t next_u32() noexcept {
             if (this->m_buffer_index >= 4) {
-                this->m_buffer = this->generate_block();
-                this->bump_counter();
+                this->m_buffer = generate_block();
+                bump_counter();
                 this->m_buffer_index = 0;
             }
             return this->m_buffer.v[this->m_buffer_index++];
@@ -216,7 +218,7 @@ namespace tlx {
          */
         template<float_like T>
         [[nodiscard]]
-        TLX_HD static T u32_to_unit_float(const uint32_t bits) noexcept {
+        TLX_HD static T u32_to_unit_float(const std::uint32_t bits) noexcept {
             constexpr std::uint32_t mantissa_bits = 24;
             constexpr float scale = 1.0f / static_cast<float>(1u << mantissa_bits);
             return static_cast<T>(static_cast<float>(bits >> (32 - mantissa_bits)) * scale);
@@ -237,10 +239,10 @@ namespace tlx {
         static constexpr std::uint32_t PHILOX_W32_0   = 0x9E3779B9u;
         static constexpr std::uint32_t PHILOX_W32_1   = 0xBB67AE85u;
 
-        std::uint32_t m_counter[4];
-        std::uint32_t m_key[2];
-        philox4x32_output m_buffer;
-        int m_buffer_index;
+        std::uint32_t m_counter[4]{};
+        std::uint32_t m_key[2]{};
+        philox4x32_output m_buffer{};
+        std::int32_t m_buffer_index;
     };
 } //namespace tlx
 
