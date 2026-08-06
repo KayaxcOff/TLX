@@ -73,7 +73,7 @@ namespace tlx {
      */
     template<typename T>
     [[nodiscard]]
-    TLX_HD reference<T> ref(T& t) {
+    TLX_HD constexpr reference<T> ref(T& t) {
         return reference<T>(t);
     }
 
@@ -86,7 +86,7 @@ namespace tlx {
      */
     template<typename T>
     [[nodiscard]]
-    TLX_HD reference<const T> cref(const T& t) {
+    TLX_HD constexpr reference<const T> cref(const T& t) {
         return reference<const T>(t);
     }
 } //namespace tlx
