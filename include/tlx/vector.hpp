@@ -29,7 +29,7 @@ namespace tlx {
         /**
          * @brief Default constructor. Creates an empty vector.
          */
-        TLX_HD vec() : m_data{} {
+        TLX_HD constexpr vec() : m_data{} {
             this->m_size = 0;
         }
         /**
@@ -37,7 +37,7 @@ namespace tlx {
          *
          * @param size Number of elements (must not exceed capacity).
          */
-        TLX_HD explicit vec(std::size_t size) : m_data{} {
+        TLX_HD constexpr explicit vec(std::size_t size) : m_data{} {
             TLX_HD_ERROR(size > N, "Vector size too large");
             this->m_size = size;
         }
@@ -46,7 +46,7 @@ namespace tlx {
          *
          * @param list Initializer list of elements.
          */
-        TLX_HD vec(const std::initializer_list<T> &list) : m_data{} {
+        TLX_HD constexpr vec(const std::initializer_list<T> &list) : m_data{} {
             TLX_HD_ERROR(list.size() > N, "Vector size too large");
             this->m_size = list.size();
             std::size_t i = 0;
@@ -55,22 +55,20 @@ namespace tlx {
                 i++;
             }
         }
-        TLX_HD vec(const T* data, std::size_t size) : m_data{} {
+        TLX_HD constexpr vec(const T* data, std::size_t size) : m_data{} {
             TLX_HD_ERROR(size > N, "Vector size too large");
             this->m_size = size;
-            std::size_t i = 0;
-            for (const auto& item : data) {
-                ::tlx::construct(data() + i, item);
-                i++;
+            for (std::size_t i = 0; i < size; ++i) {
+                ::tlx::construct(this->data() + i, data[i]);
             }
         }
-        TLX_HD vec(const vec& other) : m_data{} {
+        TLX_HD constexpr vec(const vec& other) : m_data{} {
             this->m_size = other.m_size;
             for (std::size_t i = 0; i < this->m_size; i++) {
                 ::tlx::construct(data() + i, other[i]);
             }
         }
-        TLX_HD vec(vec&& other) noexcept : m_data{} {
+        TLX_HD constexpr vec(vec&& other) noexcept : m_data{} {
             this->m_size = other.m_size;
             for (std::size_t i = 0; i < this->m_size; i++) {
                 ::tlx::construct(data() + i, ::tlx::move(other[i]));
@@ -88,7 +86,7 @@ namespace tlx {
          * @return std::size_t Capacity (equal to the template parameter N).
          */
         [[nodiscard]]
-        TLX_HD static std::size_t capacity() noexcept {
+        TLX_HD constexpr static std::size_t capacity() noexcept {
             return N;
         }
 
@@ -98,7 +96,7 @@ namespace tlx {
          * @return T* Pointer to the first element.
          */
         [[nodiscard]]
-        TLX_HD T* data() {
+        TLX_HD constexpr T* data() {
             return reinterpret_cast<T*>(this->m_data);
         }
         /**
@@ -107,7 +105,7 @@ namespace tlx {
          * @return const T* Const pointer to the first element.
          */
         [[nodiscard]]
-        TLX_HD const T* data() const {
+        TLX_HD constexpr const T* data() const {
             return reinterpret_cast<const T*>(this->m_data);
         }
         /**
@@ -116,7 +114,7 @@ namespace tlx {
          * @return std::size_t Current size.
          */
         [[nodiscard]]
-        TLX_HD std::size_t size() const noexcept {
+        TLX_HD constexpr std::size_t size() const noexcept {
             return this->m_size;
         }
         /**
@@ -125,31 +123,31 @@ namespace tlx {
          * @return true if the size is zero.
          */
         [[nodiscard]]
-        TLX_HD bool empty() const noexcept {
+        TLX_HD constexpr bool empty() const noexcept {
             return this->m_size == 0;
         }
         [[nodiscard]]
-        TLX_HD T* begin() noexcept {
+        TLX_HD constexpr T* begin() noexcept {
             return data();
         }
         [[nodiscard]]
-        TLX_HD T* end() noexcept {
+        TLX_HD constexpr T* end() noexcept {
             return data() + this->m_size;
         }
         [[nodiscard]]
-        TLX_HD const T* begin() const noexcept {
+        TLX_HD constexpr const T* begin() const noexcept {
             return data();
         }
         [[nodiscard]]
-        TLX_HD const T* end() const noexcept {
+        TLX_HD constexpr const T* end() const noexcept {
             return data() + this->m_size;
         }
         [[nodiscard]]
-        TLX_HD const T* cbegin() const noexcept {
+        TLX_HD constexpr const T* cbegin() const noexcept {
             return data();
         }
         [[nodiscard]]
-        TLX_HD const T* cend() const noexcept {
+        TLX_HD constexpr const T* cend() const noexcept {
             return data() + this->m_size;
         }
         /**
@@ -158,7 +156,7 @@ namespace tlx {
          * @note Undefined behavior if the vector is empty.
          */
         [[nodiscard]]
-        TLX_HD const T& first() const noexcept {
+        TLX_HD constexpr const T& first() const noexcept {
             return data()[0];
         }
         /**
@@ -167,7 +165,7 @@ namespace tlx {
          * @note Undefined behavior if the vector is empty.
          */
         [[nodiscard]]
-        TLX_HD const T& last() const noexcept {
+        TLX_HD constexpr const T& last() const noexcept {
             return data()[this->m_size - 1];
         }
 
@@ -329,12 +327,12 @@ namespace tlx {
         }
 
         [[nodiscard]]
-        TLX_HD T& operator[](std::size_t index) noexcept {
+        TLX_HD constexpr T& operator[](std::size_t index) noexcept {
             TLX_HD_ERROR(index >= this->m_size, "Index out of bounds");
             return data()[index];
         }
         [[nodiscard]]
-        TLX_HD const T& operator[](std::size_t index) const noexcept {
+        TLX_HD constexpr const T& operator[](std::size_t index) const noexcept {
             TLX_HD_ERROR(index >= this->m_size, "Index out of bounds");
             return data()[index];
         }

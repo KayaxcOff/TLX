@@ -5,6 +5,7 @@
 #ifndef TLX_REFERENCE_HPP
 #define TLX_REFERENCE_HPP
 
+#include <tlx/macros.hpp>
 #include <tlx/utility.hpp>
 
 namespace tlx {
@@ -21,42 +22,44 @@ namespace tlx {
     template<class T>
     class reference {
     public:
-        reference() = delete;
+        TLX_HD constexpr reference() noexcept {
+            this->m_value = nullptr;
+        }
         /**
          * @brief Constructs a reference wrapper bound to the given object.
          *
          * @param value Object to bind to.
          */
-        explicit reference(T& value) {
+        TLX_HD constexpr explicit reference(T& value) noexcept {
             this->m_value = ::tlx::addressOf(value);
         }
-        reference(const reference&) = default;
-        reference(reference&&) = default;
-        ~reference() = default;
+        TLX_HD reference(const reference&) = default;
+        TLX_HD reference(reference&&) = default;
+        TLX_HD ~reference() = default;
 
-        explicit operator T&() const noexcept {
+        TLX_HD constexpr operator T&() const noexcept {
             return *this->m_value;
         }
-        explicit operator bool() const noexcept {
+        TLX_HD constexpr explicit operator bool() const noexcept {
+            return this->m_value != nullptr;
+        }
+
+        TLX_HD constexpr T* operator->() noexcept {
+            return this->m_value;
+        }
+        TLX_HD constexpr const T* operator->() const noexcept {
             return this->m_value;
         }
 
-        T* operator->() noexcept {
-            return this->m_value;
-        }
-        const T* operator->() const noexcept {
-            return this->m_value;
-        }
-
-        T& operator()() noexcept {
+        TLX_HD constexpr T& operator()() noexcept {
             return *this->m_value;
         }
-        const T& operator()() const noexcept {
+        TLX_HD constexpr const T& operator()() const noexcept {
             return *this->m_value;
         }
 
-        reference& operator=(const reference&) = default;
-        reference& operator=(reference&&) = default;
+        TLX_HD reference& operator=(const reference&) = default;
+        TLX_HD reference& operator=(reference&&) = default;
     private:
         T* m_value;
     };
@@ -70,7 +73,7 @@ namespace tlx {
      */
     template<typename T>
     [[nodiscard]]
-    reference<T> ref(T& t) {
+    TLX_HD reference<T> ref(T& t) {
         return reference<T>(t);
     }
 
@@ -83,7 +86,7 @@ namespace tlx {
      */
     template<typename T>
     [[nodiscard]]
-    reference<const T> cref(const T& t) {
+    TLX_HD reference<const T> cref(const T& t) {
         return reference<const T>(t);
     }
 } //namespace tlx
