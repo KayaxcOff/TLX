@@ -5,10 +5,17 @@
 #ifndef TLX_CONCEPTS_HPP
 #define TLX_CONCEPTS_HPP
 
-#include <tlx/types.hpp>
+#include <concepts>
 #include <type_traits>
 
 namespace tlx {
+    struct bfloat16;
+    struct half;
+    struct qint16;
+    struct qint8;
+    struct quint16;
+    struct quint8;
+
     /**
      * @brief Specifies that a type is both nothrow move-constructible and nothrow move-assignable.
      *
@@ -52,6 +59,19 @@ namespace tlx {
     concept float_like = std::is_floating_point_v<T> || std::is_same_v<T, bfloat16> || std::is_same_v<T, half>;
 
     /**
+     * @brief Specifies that a type is one of the library's quantized integer types.
+     *
+     * This concept is satisfied by the built-in quantized integer types
+     * (`qint8`, `qint16`, `quint8`, and `quint16`). It is useful for
+     * constraining APIs that operate specifically on quantized data
+     * representations.
+     *
+     * @tparam T The type to check.
+     */
+    template<typename T>
+    concept quantize_like = std::is_same_v<T, qint16> || std::is_same_v<T, qint8> || std::is_same_v<T, quint16> || std::is_same_v<T, quint8>;
+
+    /**
      * @brief Specifies that a type is arithmetic (either integral or floating-point).
      *
      * This concept is satisfied if the type is either an integral type
@@ -60,7 +80,7 @@ namespace tlx {
      * @tparam T The type to check.
      */
     template<typename T>
-    concept arithmetic_like = integral<T> || float_like<T> || std::is_same_v<T, qint16> || std::is_same_v<T, qint8> || std::is_same_v<T, quint16> || std::is_same_v<T, quint8>;
+    concept arithmetic_like = integral<T> || float_like<T> || quantize_like<T>;
 
     /**
      * @brief Concept that checks if a type is nothrow destructible and constructible from given arguments.
