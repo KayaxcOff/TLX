@@ -10,7 +10,6 @@
 #include <tlx/memory.hpp>
 #include <tlx/utility.hpp>
 #include <initializer_list>
-#include <vector>
 
 namespace tlx {
     /**
@@ -56,11 +55,11 @@ namespace tlx {
                 i++;
             }
         }
-        explicit vec(const std::vector<T>& vector) : m_data{} {
-            TLX_HD_ERROR(vector.size() > N, "Vector size too large");
-            this->m_size = vector.size();
+        TLX_HD vec(const T* data, std::size_t size) : m_data{} {
+            TLX_HD_ERROR(size > N, "Vector size too large");
+            this->m_size = size;
             std::size_t i = 0;
-            for (const auto& item : vector) {
+            for (const auto& item : data) {
                 ::tlx::construct(data() + i, item);
                 i++;
             }
@@ -135,7 +134,7 @@ namespace tlx {
         }
         [[nodiscard]]
         TLX_HD T* end() noexcept {
-            return data() + this->size();
+            return data() + this->m_size;
         }
         [[nodiscard]]
         TLX_HD const T* begin() const noexcept {
@@ -143,7 +142,7 @@ namespace tlx {
         }
         [[nodiscard]]
         TLX_HD const T* end() const noexcept {
-            return data() + this->size();
+            return data() + this->m_size;
         }
         [[nodiscard]]
         TLX_HD const T* cbegin() const noexcept {
@@ -151,7 +150,7 @@ namespace tlx {
         }
         [[nodiscard]]
         TLX_HD const T* cend() const noexcept {
-            return data() + this->size();
+            return data() + this->m_size;
         }
         /**
          * @brief Returns a reference to the first element.
@@ -222,11 +221,11 @@ namespace tlx {
             TLX_HD_ERROR(new_size > N, "New size is higher than capacity");
             if (new_size < this->m_size) {
                 for (std::size_t i = new_size; i < this->m_size; i++) {
-                    ::tlx::destroy(this->data() + i);
+                    ::tlx::destroy(data() + i);
                 }
             } else {
                 for (std::size_t i = this->m_size; i < new_size; ++i) {
-                    ::tlx::construct(this->data() + i);
+                    ::tlx::construct(data() + i);
                 }
             }
             this->m_size = new_size;
@@ -241,11 +240,11 @@ namespace tlx {
             TLX_HD_ERROR(new_size > N, "New size is higher than capacity");
             if (new_size < this->m_size) {
                 for (std::size_t i = new_size; i < this->m_size; i++) {
-                    ::tlx::destroy(this->data() + i);
+                    ::tlx::destroy(data() + i);
                 }
             } else {
                 for (std::size_t i = this->m_size; i < new_size; ++i) {
-                    ::tlx::construct(this->data() + i, value);
+                    ::tlx::construct(data() + i, value);
                 }
             }
             this->m_size = new_size;
@@ -260,7 +259,7 @@ namespace tlx {
             this->clear();
             std::size_t i = 0;
             for (const auto& item : list) {
-                ::tlx::construct(this->data() + i, item);
+                ::tlx::construct(data() + i, item);
                 i++;
             }
             this->m_size = list.size();
@@ -276,7 +275,7 @@ namespace tlx {
             TLX_HD_ERROR(count > N, "New size is higher than capacity");
             this->clear();
             for (std::size_t i = 0; i < count; i++) {
-                ::tlx::construct(this->data() + i, value);
+                ::tlx::construct(data() + i, value);
             }
             this->m_size = count;
         }
@@ -285,7 +284,7 @@ namespace tlx {
          */
         TLX_HD void clear() {
             for (std::size_t i = 0; i < this->m_size; i++) {
-                ::tlx::destroy(this->data() + i);
+                ::tlx::destroy(data() + i);
             }
             this->m_size = 0;
         }
@@ -327,10 +326,6 @@ namespace tlx {
             --this->m_size;
             ::tlx::destroy(data() + this->m_size);
             return data() + index;
-        }
-
-        TLX_HOST explicit operator std::vector<T>() noexcept {
-            return {begin(), end()};
         }
 
         [[nodiscard]]

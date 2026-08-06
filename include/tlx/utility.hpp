@@ -21,6 +21,12 @@ namespace tlx {
     constexpr Ty* addressOf(Ty& ty) {
         return __builtin_addressof(ty);
     }
+    template<class Ty>
+    [[nodiscard]]
+    constexpr const Ty* addressOf(const Ty& t) noexcept {
+        return __builtin_addressof(t);
+    }
+
     /**
      * @brief Checks if one type is derived from another at compile time.
      *
@@ -32,6 +38,23 @@ namespace tlx {
     [[nodiscard]]
     constexpr bool isBaseOf() {
         return __is_base_of(Ty1, Ty2);
+    }
+
+    /**
+     * @brief Obtains a usable pointer to an object after its lifetime has been
+     *        restarted in the same storage.
+     *
+     * This is typically used after placement new or other operations that
+     * create a new object in previously occupied storage.
+     *
+     * @tparam Ty Type of the object.
+     * @param t0 Pointer to the object.
+     * @return Ty* Pointer to the newly created object.
+     */
+    template<class Ty>
+    [[nodiscard]]
+    constexpr Ty* launder(Ty* t0) noexcept {
+        return ::__builtin_launder(t0);
     }
 
     /**
@@ -62,6 +85,13 @@ namespace tlx {
         T t3 = ::tlx::move(t1);
         t1 = ::tlx::move(t2);
         t2 = ::tlx::move(t3);
+    }
+
+    template<class Ty, std::size_t N>
+    constexpr void swap(Ty (&a)[N], Ty (&b)[N]) noexcept {
+        for (size_t i = 0; i < N; ++i) {
+            tlx::swap(a[i], b[i]);
+        }
     }
 
     /**
@@ -136,6 +166,23 @@ namespace tlx {
         constexpr Ty&& operator()(Ty&& value) const noexcept {
             return ::tlx::forward<Ty>(value);
         }
+    };
+
+    /**
+     * @brief Stores two values of the same type.
+     *
+     * This utility type is useful for representing a pair of related values,
+     * such as ranges, coordinates, or other two-element aggregates.
+     *
+     * @tparam T Type of both stored values.
+     */
+    template<typename T>
+    struct wide {
+        T t1{};
+        T t2{};
+
+        wide() = default;
+        wide(T t1, T t2) : t1(t1), t2(t2) {}
     };
 } //namespace tlx
 
