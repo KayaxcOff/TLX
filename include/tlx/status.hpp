@@ -5,8 +5,8 @@
 #ifndef TLX_STATUS_HPP
 #define TLX_STATUS_HPP
 
+#include <tlx/string.hpp>
 #include <cstdint>
-#include <string>
 #include <string_view>
 
 namespace tlx {
@@ -29,7 +29,7 @@ namespace tlx {
      * @return std::string_view String representation of the status code.
      */
     [[nodiscard]]
-    std::string_view ToString(StatusCode code);
+    std::string_view as_string(StatusCode code);
 
     /**
      * @class Status
@@ -81,10 +81,10 @@ namespace tlx {
          * @return std::string Copy of the status message.
          */
         [[nodiscard]]
-        std::string message() const;
+        std::string_view message() const;
     private:
         StatusCode m_code;
-        std::string m_message;
+        vstring m_message;
     };
 } //namespace tlx
 

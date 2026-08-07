@@ -103,7 +103,7 @@ namespace tlx {
      */
     template<enum_like T>
     [[nodiscard]]
-    constexpr underlying_type_t<T> toUnderlying(T t) {
+    constexpr underlying_type_t<T> ToUnderlying(T t) {
         return static_cast<underlying_type_t<T>>(t);
     }
 

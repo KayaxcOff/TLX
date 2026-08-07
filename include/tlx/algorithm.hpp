@@ -18,7 +18,7 @@ namespace tlx {
      */
     template<arithmetic_like T>
     [[nodiscard]]
-    constexpr T& max(const T& t1, const T& t2) {
+    constexpr const T& max(const T& t1, const T& t2) noexcept {
         return t1 > t2 ? t1 : t2;
     }
     /**
@@ -31,7 +31,7 @@ namespace tlx {
      */
     template<arithmetic_like T>
     [[nodiscard]]
-    constexpr T& min(const T& t1, const T& t2) {
+    constexpr const T& min(const T& t1, const T& t2) noexcept {
         return t1 < t2 ? t1 : t2;
     }
 
@@ -46,7 +46,7 @@ namespace tlx {
      */
     template<arithmetic_like T>
     [[nodiscard]]
-    constexpr bool in_range(const T& value, const T& low, const T& high) {
+    constexpr bool in_range(const T& value, const T& low, const T& high) noexcept {
         return !(value < low) && !(high < value);
     }
 
@@ -59,7 +59,7 @@ namespace tlx {
      */
     template<arithmetic_like T>
     [[nodiscard]]
-    constexpr bool isZero(const T& t) {
+    constexpr bool isZero(const T& t) noexcept {
         return t == T{};
     }
     /**
@@ -71,7 +71,7 @@ namespace tlx {
      */
     template<arithmetic_like T>
     [[nodiscard]]
-    constexpr bool isPositive(const T& t) {
+    constexpr bool isPositive(const T& t) noexcept {
         return t > T{};
     }
     /**
@@ -83,7 +83,7 @@ namespace tlx {
      */
     template<arithmetic_like T>
     [[nodiscard]]
-    constexpr bool isNegative(const T& t) {
+    constexpr bool isNegative(const T& t) noexcept {
         return t < T{};
     }
     /**

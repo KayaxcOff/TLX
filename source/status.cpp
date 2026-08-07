@@ -7,7 +7,7 @@
 
 using namespace tlx;
 
-std::string_view tlx::ToString(const StatusCode code) {
+std::string_view tlx::as_string(const StatusCode code) {
     switch (code) {
         case StatusCode::Default:
             return "default";
@@ -59,6 +59,6 @@ StatusCode Status::code() const {
     return this->m_code;
 }
 
-std::string Status::message() const {
+std::string_view Status::message() const {
     return this->m_message;
 }

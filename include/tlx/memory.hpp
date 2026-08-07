@@ -162,11 +162,13 @@ namespace tlx {
     }
 
     /**
-     * @brief A simple owning smart pointer.
+     * @brief A lightweight RAII wrapper around a raw pointer.
      *
-     * This class manages the lifetime of a dynamically allocated object of type `T`.
-     * It provides basic ownership semantics, construction from arguments, and
-     * automatic destruction when the pointer goes out of scope.
+     * This class provides object-oriented access to a dynamically allocated
+     * object while exposing raw pointer semantics. It automatically constructs
+     * and destroys the managed object, but it does not enforce ownership rules
+     * beyond object lifetime management. Copying and assignment preserve raw
+     * pointer behavior, leaving ownership semantics to the user.
      *
      * @tparam T Type of the managed object.
      */
@@ -251,23 +253,60 @@ namespace tlx {
         T* m_value;
     };
 
+    /**
+     * @brief Creates a smart pointer from a raw pointer.
+     *
+     * Takes ownership of the specified raw pointer.
+     *
+     * @tparam T Type of the managed object.
+     * @param t Raw pointer to manage.
+     * @return ptr<T> Smart pointer owning the given object.
+     */
     template<typename T>
     [[nodiscard]]
     constexpr ptr<T> make_ptr(T* t) {
         return ptr<T>(t);
     }
 
+    /**
+     * @brief Returns a pointer advanced by the specified number of elements.
+     *
+     * @tparam Ty Type of the pointed-to object.
+     * @param ptr Pointer to advance.
+     * @param n Number of elements to advance.
+     * @return Ty* Pointer advanced by n elements.
+     */
     template<class Ty>
     [[nodiscard]]
     constexpr Ty* next(Ty* ptr, std::ptrdiff_t n = 1) noexcept {
         return ptr + n;
     }
+    /**
+     * @brief Returns a pointer moved backward by the specified number of elements.
+     *
+     * @tparam Ty Type of the pointed-to object.
+     * @param ptr Pointer to move backward.
+     * @param n Number of elements to move backward.
+     * @return Ty* Pointer moved backward by n elements.
+     */
     template<class Ty>
     [[nodiscard]]
     constexpr Ty* prev(Ty* ptr, std::ptrdiff_t n = 1) noexcept {
         return ptr - n;
     }
 
+    /**
+     * @brief Copies a range of elements to another location.
+     *
+     * Copies the elements in the range [first, last) into the destination
+     * beginning at dest. The source and destination ranges must not overlap.
+     *
+     * @tparam Ty Type of the elements.
+     * @param first Pointer to the first source element.
+     * @param last Pointer one past the last source element.
+     * @param dest Pointer to the destination range.
+     * @return Ty* Pointer one past the last copied element.
+     */
     template<class Ty>
     constexpr Ty* copy(const Ty* first, const Ty* last, Ty* dest) {
         while (first != last) {
