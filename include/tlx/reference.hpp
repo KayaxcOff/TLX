@@ -35,6 +35,7 @@ namespace tlx {
         }
         TLX_HD reference(const reference&) = default;
         TLX_HD reference(reference&&) = default;
+        TLX_HD constexpr explicit reference(T&&) = delete;
         TLX_HD ~reference() = default;
 
         TLX_HD constexpr operator T&() const noexcept {
@@ -89,6 +90,13 @@ namespace tlx {
     TLX_HD constexpr reference<const T> cref(const T& t) {
         return reference<const T>(t);
     }
+
+    template<typename T>
+    [[nodiscard]]
+    TLX_HD reference<T> ref(T&&) = delete;
+    template<typename T>
+    [[nodiscard]]
+    TLX_HD reference<const T> cref(const T&&) = delete;
 } //namespace tlx
 
 #endif //TLX_REFERENCE_HPP
