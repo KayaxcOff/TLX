@@ -55,6 +55,14 @@ namespace tlx {
     constexpr bool is_reference<Ty&> = true;
     template<class Ty>
     constexpr bool is_reference<Ty&&> = true;
+
+    template<typename T>
+    struct restrict {
+        using type = T* __restrict;
+    };
+
+    template<typename T>
+    using restrict_t = restrict<T>::type;
 } //namespace tlx
 
 #endif //TLX_XR1_HPP
