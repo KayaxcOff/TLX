@@ -64,7 +64,7 @@ namespace tlx {
                 #else //#if defined(__CUDA_ARCH__)
                     return static_cast<float>(*this) - static_cast<float>(other);
                 #endif //#if defined(__CUDA_ARCH__) #else
-                }
+        }
         TLX_HD bfloat16 operator*(const bfloat16& other) const noexcept {
                 #if defined(__CUDA_ARCH__)
                     __nv_bfloat16 a = static_cast<__nv_bfloat16>(*this);
@@ -73,7 +73,7 @@ namespace tlx {
                 #else //#if defined(__CUDA_ARCH__)
                     return static_cast<float>(*this) * static_cast<float>(other);
                 #endif //#if defined(__CUDA_ARCH__) #else
-            }
+        }
         TLX_HD bfloat16 operator/(const bfloat16& other) const noexcept {
                 #if defined(__CUDA_ARCH__)
                     __nv_bfloat16 a = static_cast<__nv_bfloat16>(*this);
@@ -82,43 +82,43 @@ namespace tlx {
                 #else //#if defined(__CUDA_ARCH__)
                     return static_cast<float>(*this) / static_cast<float>(other);
                 #endif //#if defined(__CUDA_ARCH__) #else
-            }
+        }
 
         TLX_HD bfloat16& operator+=(const bfloat16& other) {
                 *this = *this + other;
                 return *this;
-            }
+        }
         TLX_HD bfloat16& operator-=(const bfloat16& other) {
                 *this = *this - other;
                 return *this;
-            }
+        }
         TLX_HD bfloat16& operator*=(const bfloat16& other) {
                 *this = *this * other;
                 return *this;
-            }
+        }
         TLX_HD bfloat16& operator/=(const bfloat16& other) {
                 *this = *this / other;
                 return *this;
-            }
+        }
 
         TLX_HD bool operator==(const bfloat16& other) const {
                 return static_cast<float>(*this) == static_cast<float>(other);
-            }
+        }
         TLX_HD bool operator!=(const bfloat16& other) const {
                 return !(*this == other);
-            }
+        }
         TLX_HD bool operator<(const bfloat16& other) const {
                 return static_cast<float>(*this) < static_cast<float>(other);
-            }
+        }
         TLX_HD bool operator<=(const bfloat16& other) const {
                 return static_cast<float>(*this) <= static_cast<float>(other);
-            }
+        }
         TLX_HD bool operator>(const bfloat16& other) const {
                 return static_cast<float>(*this) > static_cast<float>(other);
-            }
+        }
         TLX_HD bool operator>=(const bfloat16& other) const {
                 return static_cast<float>(*this) >= static_cast<float>(other);
-            }
+        }
 
         TLX_HD bfloat16& operator=(const bfloat16& other) = default;
         TLX_HD bfloat16& operator=(bfloat16&& other) noexcept = default;
