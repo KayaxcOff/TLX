@@ -314,6 +314,20 @@ namespace tlx {
         }
         return dest;
     }
+
+    struct nothrow_t {
+        /**
+         * @brief Constructs a nothrow tag object.
+         *
+         * This tag is used to select overloads that are not expected to throw
+         * exceptions.
+         */
+        explicit nothrow_t() noexcept;
+    };
+
+    extern nothrow_t nothrow;
+
+    enum class align : std::size_t {};
 } //namespace tlx
 
 #endif //TLX_MEMORY_HPP

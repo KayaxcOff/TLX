@@ -21,6 +21,13 @@ namespace tlx {
     constexpr Ty* addressOf(Ty& ty) {
         return __builtin_addressof(ty);
     }
+    /**
+     * @brief Returns the address of a const object without invoking its operator&.
+     *
+     * @tparam Ty Type of the object.
+     * @param t Reference to the const object.
+     * @return const Ty* Pointer to the object.
+     */
     template<class Ty>
     [[nodiscard]]
     constexpr const Ty* addressOf(const Ty& t) noexcept {
@@ -87,6 +94,16 @@ namespace tlx {
         t2 = ::tlx::move(t3);
     }
 
+    /**
+     * @brief Swaps the elements of two arrays.
+     *
+     * Each corresponding element is swapped using tlx::swap.
+     *
+     * @tparam Ty Type of the array elements.
+     * @tparam N Number of elements in each array.
+     * @param a First array.
+     * @param b Second array.
+     */
     template<class Ty, std::size_t N>
     constexpr void swap(Ty (&a)[N], Ty (&b)[N]) noexcept {
         for (size_t i = 0; i < N; ++i) {

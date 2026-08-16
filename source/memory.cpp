@@ -20,3 +20,5 @@ void *tlx::malloc(const std::size_t bytes, std::size_t alignment) {
 void tlx::free(void *ptr, std::size_t alignment) noexcept {
     operator delete(ptr, static_cast<std::align_val_t>(alignment));
 }
+
+tlx::nothrow_t::nothrow_t() noexcept = default;
