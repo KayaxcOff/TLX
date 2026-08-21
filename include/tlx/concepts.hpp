@@ -51,12 +51,10 @@ namespace tlx {
     /**
      * @brief Specifies that a type is a floating-point type.
      *
-     * Equivalent to `std::is_floating_point_v<T>`.
-     *
      * @tparam T The type to check.
      */
     template<typename T>
-    concept float_like = std::is_floating_point_v<T> || std::is_same_v<T, bfloat16> || std::is_same_v<T, half>;
+    concept float_like = std::is_same_v<T, float> || std::is_same_v<T, bfloat16> || std::is_same_v<T, half>;
 
     /**
      * @brief Specifies that a type is one of the library's quantized integer types.
