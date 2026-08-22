@@ -51,14 +51,23 @@ namespace tlx {
     template<arithmetic_like T, arithmetic_like U>
     [[nodiscard]]
     constexpr auto lerp(T a, T b, U t) noexcept {
-        if ((a <= 0 && b >= 0) || (a >= 0 && b <= 0)) {
-            return t * b + (1 - t) * a;
-        }
-        if (t == 1) {
+        const T zero = static_cast<T>(0);
+        const U one = static_cast<U>(1);
+
+        if ((a <= zero && b >= zero) ||
+            (a >= zero && b <= zero)) {
+            return t * b + (one - t) * a;
+            }
+
+        if (t == one) {
             return b;
         }
+
         const auto x = a + t * (b - a);
-        return (t > 1) == (b > a) ? ::tlx::max(b, x) : ::tlx::min(b, x);
+
+        return (t > one) == (b > a)
+            ? ::tlx::max(b, x)
+            : ::tlx::min(b, x);
     }
     /**
      * @brief Clamps a value to a given range.
