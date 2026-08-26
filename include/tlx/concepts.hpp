@@ -105,7 +105,7 @@ namespace tlx {
     concept extend = std::derived_from<Ty1, Ty2>;
 
     template<typename T>
-    concept ttype_like = std::is_same_v<T, float> || std::is_same_v<T, int> || std::is_same_v<T, bfloat16> || std::is_same_v<T, half> || quantize_like<T>;
+    concept ttype_like = std::is_same_v<T, float> || std::is_same_v<T, int> || std::is_same_v<T, bfloat16> || std::is_same_v<T, half> ;
 } //namespace tlx
 
 #endif //TLX_CONCEPTS_HPP
