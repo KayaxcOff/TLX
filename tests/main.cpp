@@ -2,19 +2,15 @@
 // Created by muham on 26.07.2026.
 //
 
-#include <tlx/vector.hpp>
+#include <tlx/list.hpp>
 #include <tlx/types.hpp>
-#include <tlx/w.hpp>
+#include <iostream>
 
 int main() {
-    tlx::vec<tlx::bfloat16, 5> x(5);
-
-    for (auto& item : x) {
-        item = 2;
-    }
+    tlx::list<tlx::bfloat16> x = {1.f, 2.f, 3.f, 4.f};
 
     for (const auto& item : x) {
-        tlx::println("Value: {}", static_cast<float>(item));
+        std::cout << item << std::endl;
     }
 
     return 0;
