@@ -3,6 +3,7 @@ add_library(TLX STATIC
         source/errors.cpp
         source/exception.cpp
         source/file_system.cpp
+        source/float.cpp
         source/memory.cpp
         source/status.cpp
         source/string.cpp

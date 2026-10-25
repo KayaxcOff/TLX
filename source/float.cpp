@@ -1,0 +1,16 @@
+//
+// Created by muham on 25.10.2026.
+//
+
+#include "tlx/float.hpp"
+
+namespace tlx {
+    std::ostream& operator<< (std::ostream& os, const bfloat16& value) {
+        os << std::fixed << static_cast<float>(value);
+        return os;
+    }
+    std::ostream& operator<<(std::ostream& os, const half& value) {
+        os << std::fixed << static_cast<float>(value);
+        return os;
+    }
+} //namespace tlx
