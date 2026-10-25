@@ -5,8 +5,8 @@
 #ifndef TLX_UTILITY_HPP
 #define TLX_UTILITY_HPP
 
+#include <tlx/_detail/xr2.hpp>
 #include <tlx/concepts.hpp>
-#include <tlx/xr1.hpp>
 
 namespace tlx {
     /**
