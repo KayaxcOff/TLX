@@ -1,13 +1,12 @@
 add_library(TLX STATIC
         source/buffer.cpp
-        source/errors.cpp
         source/exception.cpp
         source/file_system.cpp
         source/float.cpp
         source/memory.cpp
         source/status.cpp
         source/string.cpp
-        source/types.cpp
+        source/quantize_types.cpp
 )
 
 add_library(TLX::TLX ALIAS TLX)
